@@ -1,0 +1,10 @@
+
+
+#gameCanvas{
+	background-color:#123456;
+	width:500px;
+	height:500px;
+	
+	/* Disable the orange highlight on colours */
+	outline-color: transparent;
+}
