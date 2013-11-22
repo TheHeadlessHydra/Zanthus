@@ -8,7 +8,22 @@
 
 function onClick()
 {
-	console.log('Div content clicked!');
+	/* Grab position of mouse click relative to div */
+	var x=event.clientX;
+	var y=event.clientY;
+	
+	var rect = document.getElementById('gameCanvas').getBoundingClientRect();
+	var divTop = rect.top;
+	var divRight = rect.right;
+	var divBottom = rect.bottom;
+	var divLeft = rect.left;
+	
+	var xPosInDiv = (x-divLeft);
+	var yPosInDiv = (y-divTop);
+	
+	console.log('Div content clicked: '+xPosInDiv+' '+yPosInDiv);
+	
+
     //document.getElementById('gameCanvas').innerHTML="clicked";
     document.getElementById('gameCanvas').focus();
 
@@ -16,7 +31,7 @@ function onClick()
 
 //this handler is never called
 function onKeypressDiv()
-{
+{	
 	console.log('Pressed a key when gameContent had focus!');
     //document.getElementById('gameCanvas').innerHTML="keypress on div";
     

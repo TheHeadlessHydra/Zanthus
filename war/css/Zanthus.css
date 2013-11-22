@@ -1,6 +1,9 @@
 
-
+h1{
+	text-align:center;
+}
 #gameCanvas{
+	margin:0 auto;
 	background-color:#123456;
 	width:500px;
 	height:500px;
