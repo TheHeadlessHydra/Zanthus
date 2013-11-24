@@ -5,6 +5,9 @@ SCREEN_HEIGHT = window.innerHeight,
 SCREEN_WIDTH_HALF = SCREEN_WIDTH / 2, 
 SCREEN_HEIGHT_HALF = SCREEN_HEIGHT / 2;
 
+var DIV_WIDTH = 500;
+var DIV_HEIGHT = 500;
+
 init();
 animate();
 
@@ -12,10 +15,17 @@ var cube;
 
 function init() {
 
-	mainCamera = new THREE.PerspectiveCamera(75, 500 / 500, 1,10000);
+	/**							*
+	 * 			CAMERA   		*
+	 * 			  &				*
+	 *          SCENE           *
+	 */
+	mainCamera = new THREE.PerspectiveCamera(50, DIV_WIDTH / DIV_HEIGHT, 1,10000);
+	//mainCamera = new THREE.OrthographicCamera( 500 / - 2, 500 / 2, 500 / 2, 500 / - 2, 1, 1000 );
 	mainCamera.position.z = 450;
 	mainScene = new THREE.Scene();
 	mainScene.add( mainCamera );
+
 
 	/**							*
 	 * 			RENDERER		*
@@ -26,12 +36,7 @@ function init() {
 	});
 	document.getElementById('gameCanvas').appendChild(renderer.domElement);
 	renderer.autoClear = false;
-	renderer.setSize(500, 500);
-
-	
-	
-	//document.addEventListener('mousemove', onDocumentMouseMove, false);
-	//document.body.appendChild(renderer.domElement);
+	renderer.setSize(DIV_WIDTH, DIV_HEIGHT);
 	
 	// attach the render-supplied DOM element (the gameCanvas)
 	var c = document.getElementById("gameCanvas");
@@ -44,19 +49,17 @@ function init() {
 	stats.domElement.style.top = '0px';
 	document.getElementById('gameCanvas').appendChild(stats.domElement);
 
-	//window.addEventListener('resize', onWindowResize, false);
-	
-	
-	// set up the sphere vars
-	// lower 'segment' and 'ring' values will increase performance
-	var radius = 5,
-	segments = 6,
-	rings = 6;
 	 
+	//  Create the object
 	var geometry = new THREE.CubeGeometry(111,111,111);
-	var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+	var material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
 	cube = new THREE.Mesh( geometry, material );
 	mainScene.add( cube );
+	
+	// Create the light
+	var directionalLight = new THREE.DirectionalLight(0xffffff);
+    directionalLight.position.set(1, 1, 1).normalize();
+    mainScene.add(directionalLight);
 
 }
 
