@@ -12,6 +12,8 @@ init();
 animate();
 
 var cube;
+var renderer;
+var geometry;
 
 function init() {
 
@@ -25,6 +27,10 @@ function init() {
 	mainCamera.position.z = 450;
 	mainScene = new THREE.Scene();
 	mainScene.add( mainCamera );
+	
+	blankCamera = new THREE.PerspectiveCamera(50, DIV_WIDTH / DIV_HEIGHT, 1,10000);
+	blankScene = new THREE.Scene();
+	blankScene.add( blankCamera );
 
 
 	/**							*
@@ -51,10 +57,12 @@ function init() {
 
 	 
 	//  Create the object
-	var geometry = new THREE.CubeGeometry(111,111,111);
+	geometry = new THREE.CubeGeometry(111,111,111);
 	var material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
 	cube = new THREE.Mesh( geometry, material );
 	mainScene.add( cube );
+	
+
 	
 	// Create the light
 	var directionalLight = new THREE.DirectionalLight(0xffffff);
@@ -72,6 +80,15 @@ function animate() {
 	stats.update();
 }
 
+function animateBlank() {
+
+	requestAnimationFrame(animateBlank);
+
+	update();
+	renderBlank();
+	stats.update();
+}
+
 function update() {
 	cube.rotation.y += 0.01;
 }
@@ -79,4 +96,8 @@ function update() {
 function render() {
 	
 	renderer.render(mainScene, mainCamera);
+}
+function renderBlank() {
+	
+	renderer.render(blankScene, mainCamera);
 }

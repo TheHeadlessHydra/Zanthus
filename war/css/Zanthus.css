@@ -11,3 +11,22 @@ h1{
 	/* Disable the orange highlight on colours */
 	outline-color: transparent;
 }
+
+#choices{	
+    height: 100%;
+    width:100%;	
+	background:#000;
+	
+	vertical-align: middle;
+    display: inline-block;
+    text-align:center;
+	
+	padding:50px;
+	padding-left:0px;
+	padding-right:0px;
+}
+img{
+	padding:15px;
+	background: #3A6F9A;
+    vertical-align: middle;
+}

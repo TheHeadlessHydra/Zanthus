@@ -2,6 +2,10 @@
 
 $("#gameCanvas").on("mousemove", function(e) {
     if (e.which == 1) {
+    	
+    	mainScene.add( cube );
+    	animate();
+    	
     	var x=event.clientX;
     	var y=event.clientY;
     	
@@ -72,8 +76,15 @@ function onKeypressDoc()
     //document.getElementById('gameCanvas').innerHTML="keypress on doc";
 }
 
+function removeEntity() {
+    mainScene.remove( cube );
+    //geometry.dispose();
+    animateBlank();
+}
 
 //install event handlers
+document.getElementById('item').addEventListener("click", removeEntity, false);
+
 document.getElementById('gameCanvas').addEventListener("click", onClick, false);
 document.getElementById('gameCanvas').addEventListener("keypress", onKeypressDiv, false);
 document.addEventListener("keypress", onKeypressDoc, false);
