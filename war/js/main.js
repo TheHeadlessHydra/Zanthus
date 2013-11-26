@@ -12,8 +12,17 @@ init();
 animate();
 
 var cube;
-var renderer;
-var geometry;
+var cubeInScene = 1;
+var cube2;
+var cube2InScene = 0;
+var cube3;
+var cube3InScene = 0;
+var cube4;
+var cube4InScene = 0;
+
+var requestIdAnimate;
+var requestIdAnimateBlank;
+
 
 function init() {
 
@@ -62,7 +71,21 @@ function init() {
 	cube = new THREE.Mesh( geometry, material );
 	mainScene.add( cube );
 	
-
+	geometry = new THREE.CubeGeometry(0.1,0.1,500);
+	material = new THREE.MeshLambertMaterial( { color: 0x000000 } );
+	cube2 = new THREE.Mesh( geometry, material );
+	blankScene.add( cube2 );
+	//cube2.position.x=0;
+	
+	geometry = new THREE.CubeGeometry(100,100,0);
+	material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
+	cube3 = new THREE.Mesh( geometry, material );
+	cube3.position.x=-150;
+	
+	geometry = new THREE.CubeGeometry(100,100,0);
+	material = new THREE.MeshLambertMaterial( { color: 0x125fa4 } );
+	cube4 = new THREE.Mesh( geometry, material );
+	cube4.position.x=150;
 	
 	// Create the light
 	var directionalLight = new THREE.DirectionalLight(0xffffff);
@@ -72,32 +95,43 @@ function init() {
 }
 
 function animate() {
-
+	//console.log("animate");
 	requestAnimationFrame(animate);
-
 	update();
 	render();
 	stats.update();
 }
-
-function animateBlank() {
-
-	requestAnimationFrame(animateBlank);
-
-	update();
-	renderBlank();
-	stats.update();
+function stopAnimate(){
+	if(cubeInScene == 1){
+		cubeInScene = 0;
+		mainScene.remove( cube );
+	}
+	//geometry.dispose();
+    //requestIdAnimate = 0;
+    //window.cancelAnimationFrame(animate);
+    //console.log("request id is: "+requestIdAnimate);
+	animateBlank();
 }
-
+function startAnimate(){
+	if(cubeInScene == 0){
+		cubeInScene = 1;
+		mainScene.add( cube );
+	}
+}
 function update() {
+	//console.log('update');
 	cube.rotation.y += 0.01;
 }
-
 function render() {
-	
 	renderer.render(mainScene, mainCamera);
 }
+
+
+
+function animateBlank() {
+	requestAnimationFrame(animateBlank);
+	renderBlank();
+}
 function renderBlank() {
-	
 	renderer.render(blankScene, mainCamera);
 }
