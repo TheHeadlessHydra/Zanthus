@@ -24,7 +24,8 @@ $("#gameCanvas").on("mousemove", function(e) {
     	var xPosScene = xPosInDiv - 250;
     	var yPosScene = 250 - yPosInDiv;
     	
-    	cube.position.set(xPosScene,yPosScene,-50);
+    	onMouseMove(xPosScene,yPosScene);
+    	//cube.position.set(xPosScene,yPosScene,-50);
     	console.log('Div content clicked: '+xPosInDiv+' '+yPosInDiv);
     	
         //document.getElementById('gameCanvas').innerHTML="clicked";

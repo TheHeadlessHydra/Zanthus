@@ -20,6 +20,8 @@ var cube3InScene = 0;
 var cube4;
 var cube4InScene = 0;
 
+var mainCubeToMove = cube;
+
 var requestIdAnimate;
 var requestIdAnimateBlank;
 
@@ -40,6 +42,14 @@ function init() {
 	blankCamera = new THREE.PerspectiveCamera(50, DIV_WIDTH / DIV_HEIGHT, 1,10000);
 	blankScene = new THREE.Scene();
 	blankScene.add( blankCamera );
+	
+	cube2Camera = new THREE.PerspectiveCamera(50, DIV_WIDTH / DIV_HEIGHT, 1,10000);
+	cube2Scene = new THREE.Scene();
+	cube2Scene.add( cube2Camera );
+	
+	cube3Camera = new THREE.PerspectiveCamera(50, DIV_WIDTH / DIV_HEIGHT, 1,10000);
+	cube3Scene = new THREE.Scene();
+	cube3Scene.add( cube3Camera );
 
 
 	/**							*
@@ -77,12 +87,12 @@ function init() {
 	blankScene.add( cube2 );
 	//cube2.position.x=0;
 	
-	geometry = new THREE.CubeGeometry(100,100,0);
+	geometry = new THREE.CubeGeometry(111,111,111);
 	material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
 	cube3 = new THREE.Mesh( geometry, material );
 	cube3.position.x=-150;
 	
-	geometry = new THREE.CubeGeometry(100,100,0);
+	geometry = new THREE.CubeGeometry(111,111,111);
 	material = new THREE.MeshLambertMaterial( { color: 0x125fa4 } );
 	cube4 = new THREE.Mesh( geometry, material );
 	cube4.position.x=150;
@@ -106,27 +116,39 @@ function stopAnimate(){
 		cubeInScene = 0;
 		mainScene.remove( cube );
 	}
-	//geometry.dispose();
-    //requestIdAnimate = 0;
-    //window.cancelAnimationFrame(animate);
-    //console.log("request id is: "+requestIdAnimate);
+	if(cube3InScene == 0){
+		cube3InScene = 1;
+		mainScene.add( cube3 );
+	}
 	animateBlank();
 }
 function startAnimate(){
 	if(cubeInScene == 0){
 		cubeInScene = 1;
 		mainScene.add( cube );
+		mainCubeToMove = cube;
+	}
+	if(cube3InScene == 1){
+		cube3InScene = 0;
+		mainScene.remove( cube3 );
+		mainCubeToMove = cube3;
 	}
 }
 function update() {
 	//console.log('update');
 	cube.rotation.y += 0.01;
+	cube3.rotation.y += 0.01;
 }
 function render() {
 	renderer.render(mainScene, mainCamera);
+	renderer.render(cube2Scene, cube2Camera);
+	renderer.render(cube3Scene, cube3Camera);
 }
 
-
+function onMouseMove(xPosScene,yPosScene) {
+	cube3.position.set(xPosScene,yPosScene,-50);
+	cube.position.set(xPosScene,yPosScene,-50);
+}
 
 function animateBlank() {
 	requestAnimationFrame(animateBlank);
