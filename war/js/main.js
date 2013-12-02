@@ -13,8 +13,8 @@ animate();
 
 var cube;
 var cubeInScene = 1;
-var cube2;
-var cube2InScene = 0;
+var blankCube;
+var blankCubeInScene = 0;
 var cube3;
 var cube3InScene = 0;
 var cube4;
@@ -43,13 +43,15 @@ function init() {
 	blankScene = new THREE.Scene();
 	blankScene.add( blankCamera );
 	
-	cube2Camera = new THREE.PerspectiveCamera(50, DIV_WIDTH / DIV_HEIGHT, 1,10000);
-	cube2Scene = new THREE.Scene();
-	cube2Scene.add( cube2Camera );
-	
 	cube3Camera = new THREE.PerspectiveCamera(50, DIV_WIDTH / DIV_HEIGHT, 1,10000);
+	cube3Camera.position.z = 450;
 	cube3Scene = new THREE.Scene();
 	cube3Scene.add( cube3Camera );
+	
+	cube4Camera = new THREE.PerspectiveCamera(50, DIV_WIDTH / DIV_HEIGHT, 1,10000);
+	cube4Camera.position.z = 450;
+	cube4Scene = new THREE.Scene();
+	cube4Scene.add( cube4Camera );
 
 
 	/**							*
@@ -81,26 +83,42 @@ function init() {
 	cube = new THREE.Mesh( geometry, material );
 	mainScene.add( cube );
 	
+	geometry = new THREE.CubeGeometry(200,100,50);
+	material = new THREE.MeshLambertMaterial( { color: 0xf0ff00 } );
+	wall = new THREE.Mesh( geometry, material );
+	wall.position.set(0,0-100,0);
+	mainScene.add( wall );
+	//collidableMeshList.push(wall);
+	
+	
 	geometry = new THREE.CubeGeometry(0.1,0.1,500);
 	material = new THREE.MeshLambertMaterial( { color: 0x000000 } );
-	cube2 = new THREE.Mesh( geometry, material );
-	blankScene.add( cube2 );
-	//cube2.position.x=0;
+	blankCube = new THREE.Mesh( geometry, material );
+	blankScene.add( blankCube );
+	//blankCube.position.x=0;
 	
-	geometry = new THREE.CubeGeometry(111,111,111);
-	material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
-	cube3 = new THREE.Mesh( geometry, material );
+	geometry3 = new THREE.CubeGeometry(111,111,111);
+	material3 = new THREE.MeshLambertMaterial( { color: 0x32a7b1 } );
+	cube3 = new THREE.Mesh( geometry3, material3 );
 	cube3.position.x=-150;
 	
-	geometry = new THREE.CubeGeometry(111,111,111);
-	material = new THREE.MeshLambertMaterial( { color: 0x125fa4 } );
-	cube4 = new THREE.Mesh( geometry, material );
+	geometry4 = new THREE.CubeGeometry(111,111,111);
+	material4 = new THREE.MeshLambertMaterial( { color: 0xa74040 } );
+	cube4 = new THREE.Mesh( geometry4, material4 );
 	cube4.position.x=150;
 	
 	// Create the light
 	var directionalLight = new THREE.DirectionalLight(0xffffff);
     directionalLight.position.set(1, 1, 1).normalize();
     mainScene.add(directionalLight);
+    
+    var directionalLight3 = new THREE.DirectionalLight(0xffffff);
+    directionalLight3.position.set(1, 1, 1).normalize();
+    cube3Scene.add(directionalLight3);
+    
+    var directionalLight4 = new THREE.DirectionalLight(0xffffff);
+    directionalLight4.position.set(1, 1, 1).normalize();
+    cube4Scene.add(directionalLight4);
 
 }
 
@@ -111,18 +129,7 @@ function animate() {
 	render();
 	stats.update();
 }
-function stopAnimate(){
-	if(cubeInScene == 1){
-		cubeInScene = 0;
-		mainScene.remove( cube );
-	}
-	if(cube3InScene == 0){
-		cube3InScene = 1;
-		mainScene.add( cube3 );
-	}
-	animateBlank();
-}
-function startAnimate(){
+function animateOne(){
 	if(cubeInScene == 0){
 		cubeInScene = 1;
 		mainScene.add( cube );
@@ -130,24 +137,87 @@ function startAnimate(){
 	}
 	if(cube3InScene == 1){
 		cube3InScene = 0;
-		mainScene.remove( cube3 );
+		cube3Scene.remove( cube3 );
 		mainCubeToMove = cube3;
 	}
+	if(cube4InScene == 1){
+		cube4InScene = 0;
+		cube4Scene.remove( cube4 );
+		mainCubeToMove = cube4;
+	}
+	animateBlank();
 }
+function animateTwo(){
+	if(cubeInScene == 1){
+		cubeInScene = 0;
+		mainScene.remove( cube );
+		mainCubeToMove = cube;
+	}
+	if(cube3InScene == 0){
+		cube3InScene = 1;
+		cube3Scene.add( cube3 );
+		mainCubeToMove = cube3;
+	}
+	if(cube4InScene == 1){
+		cube4InScene = 0;
+		cube4Scene.remove( cube4 );
+		mainCubeToMove = cube4;
+	}
+	animateBlank();
+}
+function animateThree(){
+	if(cubeInScene == 1){
+		cubeInScene = 0;
+		mainScene.remove( cube );
+		mainCubeToMove = cube;
+	}
+	if(cube3InScene == 1){
+		cube3InScene = 0;
+		cube3Scene.remove( cube3 );
+		mainCubeToMove = cube3;
+	}
+	if(cube4InScene == 0){
+		cube4InScene = 1;
+		cube4Scene.add( cube4 );
+		mainCubeToMove = cube4;
+	}
+	animateBlank();
+}
+
 function update() {
+
+	var collidableMeshList = [wall];
+	
+	for (var vertexIndex = 0; vertexIndex < cube.geometry.vertices.length; vertexIndex++)
+	{       
+	    var localVertex = cube.geometry.vertices[vertexIndex].clone();
+	    var globalVertex = cube.matrix.multiplyVector3(localVertex);
+	    var directionVector = globalVertex.sub( cube.position );
+
+	    var ray = new THREE.Raycaster( cube.position, directionVector.clone().normalize() );
+	    var collisionResults = ray.intersectObjects( collidableMeshList );
+	    if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
+	    {
+	    	console.log("COLLIDE!");
+	    }
+	}
+	
 	//console.log('update');
 	cube.rotation.y += 0.01;
 	cube3.rotation.y += 0.01;
+	cube4.rotation.y += 0.01;
 }
 function render() {
 	renderer.render(mainScene, mainCamera);
-	renderer.render(cube2Scene, cube2Camera);
+	renderer.render(blankScene, blankCamera);
 	renderer.render(cube3Scene, cube3Camera);
+	renderer.render(cube4Scene, cube4Camera);
 }
 
 function onMouseMove(xPosScene,yPosScene) {
-	cube3.position.set(xPosScene,yPosScene,-50);
 	cube.position.set(xPosScene,yPosScene,-50);
+	cube3.position.set(xPosScene,yPosScene,-50);
+	cube4.position.set(xPosScene,yPosScene,-50);
 }
 
 function animateBlank() {

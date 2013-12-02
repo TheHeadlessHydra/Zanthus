@@ -1,13 +1,11 @@
 
 
-$(".item").click(function(){
-	stopAnimate();
-});
+$(".item1").click(function(){ animateOne(); });
+$(".item2").click(function(){ animateTwo(); });
+$(".item3").click(function(){ animateThree(); });
 
 $("#gameCanvas").on("mousemove", function(e) {
     if (e.which == 1) {
-    	
-    	startAnimate();
     	
     	var x=event.clientX;
     	var y=event.clientY;
