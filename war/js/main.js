@@ -152,7 +152,6 @@ function onMouseMove(xPosScene,yPosScene) {
  *
  */
 function animate() {
-	//console.log("animate");
 	requestAnimationFrame(animate);
 	update();
 	render();
@@ -178,7 +177,6 @@ function update() {
 	    }
 	}
 	
-	//console.log('update');
 	cube.rotation.y += 0.01;
 	cube3.rotation.y += 0.01;
 	cube4.rotation.y += 0.01;

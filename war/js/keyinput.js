@@ -1,15 +1,18 @@
 
-
-$(".item1").click(function(){ 
+$(".add").click(function(){ 
 	addToTower();
+});
+$(".item1").click(function(){ 
 	animateOne(); 
 });
 $(".item2").click(function(){ 
 	animateTwo(); 
 });
 $(".item3").click(function(){ 
-	popFromList();
 	animateThree(); 
+});
+$(".erase").click(function(){ 
+	popFromList();
 });
 
 $("#gameCanvas").on("mousemove", function(e) {

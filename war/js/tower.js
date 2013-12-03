@@ -3,7 +3,13 @@
 var TOWER_X = -300;
 var TOWER_Z = 0;
 
-var towerMeshList = [];
+
+function tower(height, mesh){
+	this.height = height;
+	this.mesh = mesh;
+};
+
+var towerMeshList = new Array();
 var currentTowerHeight = -50;
 
 
@@ -15,24 +21,24 @@ function addToTower(){
 	newMesh.position.y=currentTowerHeight;
 	newMesh.position.z=TOWER_Z;
 	
+	console.log('height-add: '+currentTowerHeight);
+	addToList(new tower(50,newMesh));
 	currentTowerHeight = currentTowerHeight + 50;
-	addToList(newMesh);
 }
 
-function addToList(mesh){
-	mainScene.add(mesh);
-	towerMeshList.push(mesh);
+function addToList(tower){
+	mainScene.add(tower.mesh);
+	towerMeshList.push(tower);
 }
 function popFromList(){
-	var mesh = towerMeshList.pop();
-	currentTowerHeight = currentTowerHeight - 50;
-	mainScene.remove(mesh);
-	
+	var tower = towerMeshList.pop();
+	currentTowerHeight = currentTowerHeight - tower.height;
+	console.log('height-remove: '+tower.height);
+	mainScene.remove(tower.mesh);
 }
-function removeFromList(mesh){	
-	var returnValue = towerMeshList.indexOf(mesh);
+function removeFromList(tower){	
+	var returnValue = towerMeshList.indexOf(tower);
 	if(returnValue != -1){
 		towerMeshList.splice(returnValue,1);
 	}
-	
 }
