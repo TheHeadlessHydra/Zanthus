@@ -1,8 +1,16 @@
 
 
-$(".item1").click(function(){ animateOne(); });
-$(".item2").click(function(){ animateTwo(); });
-$(".item3").click(function(){ animateThree(); });
+$(".item1").click(function(){ 
+	addToTower();
+	animateOne(); 
+});
+$(".item2").click(function(){ 
+	animateTwo(); 
+});
+$(".item3").click(function(){ 
+	popFromList();
+	animateThree(); 
+});
 
 $("#gameCanvas").on("mousemove", function(e) {
     if (e.which == 1) {
