@@ -5,8 +5,8 @@ h1{
 #gameCanvas{
 	margin:0 auto;
 	background-color:#123456;
-	width:500px;
-	height:500px;
+	width:800px;
+	height:600px;
 	
 	/* Disable the orange highlight on colours */
 	outline-color: transparent;

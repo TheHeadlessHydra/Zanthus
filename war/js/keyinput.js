@@ -1,6 +1,9 @@
 
 $(".add").click(function(){ 
-	addToTower();
+	addToTower(50);
+});
+$(".add2").click(function(){ 
+	addToTower(100);
 });
 $(".item1").click(function(){ 
 	animateOne(); 
@@ -16,8 +19,7 @@ $(".erase").click(function(){
 });
 
 $("#gameCanvas").on("mousemove", function(e) {
-    if (e.which == 1) {
-    	
+    if (e.which == 1) {	
     	var x=event.clientX;
     	var y=event.clientY;
     	
@@ -33,37 +35,58 @@ $("#gameCanvas").on("mousemove", function(e) {
     	var xPosScene = xPosInDiv - 250;
     	var yPosScene = 250 - yPosInDiv;
     	
-    	onMouseMove(xPosScene,yPosScene);
+    	onLeftMouseMove(xPosScene,yPosScene);
     	//cube.position.set(xPosScene,yPosScene,-50);
     	console.log('Div content clicked: '+xPosInDiv+' '+yPosInDiv);
     	
         //document.getElementById('gameCanvas').innerHTML="clicked";
         document.getElementById('gameCanvas').focus();
     }
+    if(e.which == 3){
+    	var x=event.clientX;
+    	var y=event.clientY;
+    	
+    	var rect = document.getElementById('gameCanvas').getBoundingClientRect();
+    	var divTop = rect.top;
+    	var divRight = rect.right;
+    	var divBottom = rect.bottom;
+    	var divLeft = rect.left;
+    	
+    	var xPosInDiv = (x-divLeft);
+    	var yPosInDiv = (y-divTop);
+    	
+    	var xPosScene = xPosInDiv - 250;
+    	var yPosScene = 250 - yPosInDiv;
+    	
+    	onRightMouseMove(xPosScene,yPosScene);
+    	console.log('Right click!');
+    }
+});
+$("#gameCanvas").on("mouseup", function(e) {
+	// Reset camera movement
+    if(e.which == 3){
+    	lastX = -1;
+    	lastY = -1;
+    }
 });
 
-
+function onRightClick(){	
+	return false;
+}
 function onClick()
 {
 }
-
-//this handler is never called
 function onKeypressDiv()
 {	
 	console.log('Pressed a key when gameContent had focus!');    
 }
-
 function onKeypressDoc()
-{
-}
-
-function removeEntity() {
-    stopAnimate();
+{	
+	console.log('Pressed a key when gameContent had focus!');    
 }
 
 //install event handlers
-//document.getElementById('item').addEventListener("click", removeEntity, false);
-
+document.getElementById('gameCanvas').oncontextmenu=onRightClick;
 document.getElementById('gameCanvas').addEventListener("click", onClick, false);
 document.getElementById('gameCanvas').addEventListener("keypress", onKeypressDiv, false);
 document.addEventListener("keypress", onKeypressDoc, false);

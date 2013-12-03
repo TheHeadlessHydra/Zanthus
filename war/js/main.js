@@ -5,8 +5,8 @@ SCREEN_HEIGHT = window.innerHeight,
 SCREEN_WIDTH_HALF = SCREEN_WIDTH / 2, 
 SCREEN_HEIGHT_HALF = SCREEN_HEIGHT / 2;
 
-var DIV_WIDTH = 500;
-var DIV_HEIGHT = 500;
+var DIV_WIDTH = 800;
+var DIV_HEIGHT = 600;
 
 init();
 animate();
@@ -20,7 +20,7 @@ var cube4InScene = 0;
 
 var mainCubeToMove = cube;
 var mainScene;
-
+var mainCamera;
 
 function init() {
 
@@ -29,9 +29,11 @@ function init() {
 	 * 			  &				*
 	 *          SCENE           *
 	 */
-	mainCamera = new THREE.PerspectiveCamera(50, DIV_WIDTH / DIV_HEIGHT, 1,10000);
+	mainCamera = new THREE.PerspectiveCamera(80, DIV_WIDTH / DIV_HEIGHT, 1,10000);
 	//mainCamera = new THREE.OrthographicCamera( 500 / - 2, 500 / 2, 500 / 2, 500 / - 2, 1, 1000 );
 	mainCamera.position.z = 1000;
+	mainCamera.position.y = 500;
+	//mainCamera.rotation.x = -0.2;
 	mainScene = new THREE.Scene();
 	mainScene.add( mainCamera );
 
@@ -68,7 +70,7 @@ function init() {
 	geometry = new THREE.CubeGeometry(200,100,50);
 	material = new THREE.MeshLambertMaterial( { color: 0xf0ff00 } );
 	wall = new THREE.Mesh( geometry, material );
-	wall.position.set(0,0-100,0);
+	wall.position.set(0,-300,0);
 	mainScene.add( wall );
 	//collidableMeshList.push(wall);
 	
@@ -82,8 +84,15 @@ function init() {
 	cube4 = new THREE.Mesh( geometry, material );
 	cube4.position.x=150;
 	
+	geometry = new THREE.PlaneGeometry(2000,1000,50,50);
+	material = new THREE.MeshLambertMaterial( { color: 0xa74040 } );
+	groundPlane = new THREE.Mesh( geometry, material );
+	groundPlane.rotation.x=80;
+	groundPlane.position.z=-50;
+	mainScene.add(groundPlane);
+	
 	// Create the lights
-	var directionalLight = new THREE.DirectionalLight(0xffffff);
+	var directionalLight = new THREE.HemisphereLight( 0x404040,0xffffff,2 );
     directionalLight.position.set(1, 1, 1).normalize();
     mainScene.add(directionalLight);
 
@@ -141,12 +150,38 @@ function animateThree(){
 	}
 }
 
-function onMouseMove(xPosScene,yPosScene) {
+function onLeftMouseMove(xPosScene,yPosScene) {
 	cube.position.set(xPosScene,yPosScene,-50);
 	cube3.position.set(xPosScene,yPosScene,-50);
 	cube4.position.set(xPosScene,yPosScene,-50);
 }
 
+lastX = -1;
+lastY = -1;
+cameraMovementSpeed = 2;
+function onRightMouseMove(xPosScene,yPosScene){
+	if(lastX == -1){
+		lastX = xPosScene;
+		lastY = yPosScene;
+		return;
+	}
+	var xDiff = lastX-xPosScene;
+	var yDiff = lastY-yPosScene;
+	lastX = xPosScene;
+	lastY = yPosScene;
+	
+	var posOrNeg = 1;
+	if(yDiff < 0){
+		posOrNeg = -1;
+	}
+	if(yDiff != 0){
+		yDiff = posOrNeg*(Math.log(Math.abs(yDiff)));
+	}
+	
+	var currentY = mainCamera.position.y;
+	console.log("adding: "+yDiff);
+	mainCamera.position.y = currentY + (yDiff*cameraMovementSpeed);
+}
 /**
  * Animation, render and update frameworks
  *

@@ -9,21 +9,20 @@ function tower(height, mesh){
 	this.mesh = mesh;
 };
 
-var towerMeshList = new Array();
-var currentTowerHeight = -50;
+towerMeshList = new Array();
+currentTowerHeight = 0;
 
 
-function addToTower(){
-	geometry = new THREE.CubeGeometry(100,50,100);
+function addToTower(height){
+	geometry = new THREE.CubeGeometry(100,height,100);
 	material = new THREE.MeshLambertMaterial( { color: 0xa74fff } );
 	newMesh = new THREE.Mesh( geometry, material );
 	newMesh.position.x=TOWER_X;
-	newMesh.position.y=currentTowerHeight;
+	newMesh.position.y=currentTowerHeight+(height/2); // Pivot in centre of object
 	newMesh.position.z=TOWER_Z;
 	
-	console.log('height-add: '+currentTowerHeight);
-	addToList(new tower(50,newMesh));
-	currentTowerHeight = currentTowerHeight + 50;
+	currentTowerHeight = currentTowerHeight + height;
+	addToList(new tower(height,newMesh));
 }
 
 function addToList(tower){
@@ -32,9 +31,10 @@ function addToList(tower){
 }
 function popFromList(){
 	var tower = towerMeshList.pop();
-	currentTowerHeight = currentTowerHeight - tower.height;
-	console.log('height-remove: '+tower.height);
-	mainScene.remove(tower.mesh);
+	if(typeof tower != 'undefined'){
+		currentTowerHeight = currentTowerHeight - tower.height;
+		mainScene.remove(tower.mesh);
+	}
 }
 function removeFromList(tower){	
 	var returnValue = towerMeshList.indexOf(tower);
