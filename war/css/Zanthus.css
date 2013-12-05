@@ -5,7 +5,7 @@ h1{
 #gameCanvas{
 	margin:0 auto;
 	background-color:#123456;
-	width:800px;
+	width:1000px;
 	height:600px;
 	
 	/* Disable the orange highlight on colours */

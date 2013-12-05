@@ -1,20 +1,27 @@
+/**
+ * tower.js
+ * 
+ * This file is in charge of creating and maintaining the tower structure,
+ * its associated pieces, and how it is built.  
+ * 
+ * @author Serj Kazar
+ */
 
-
-var TOWER_X = -300;
+var TOWER_X = -450;
 var TOWER_Z = 0;
-
 
 function tower(height, mesh){
 	this.height = height;
 	this.mesh = mesh;
 };
 
-towerMeshList = new Array();
+towerMeshList = [];
+collidableTowerList = [];
 currentTowerHeight = 0;
 
 
 function addToTower(height){
-	geometry = new THREE.CubeGeometry(100,height,100);
+	geometry = new THREE.CubeGeometry(300,height,300);
 	material = new THREE.MeshLambertMaterial( { color: 0xa74fff } );
 	newMesh = new THREE.Mesh( geometry, material );
 	newMesh.position.x=TOWER_X;
@@ -28,9 +35,11 @@ function addToTower(height){
 function addToList(tower){
 	mainScene.add(tower.mesh);
 	towerMeshList.push(tower);
+	collidableTowerList.push(tower.mesh);
 }
 function popFromList(){
 	var tower = towerMeshList.pop();
+	collidableTowerList.pop();
 	if(typeof tower != 'undefined'){
 		currentTowerHeight = currentTowerHeight - tower.height;
 		mainScene.remove(tower.mesh);

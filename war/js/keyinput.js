@@ -1,3 +1,11 @@
+/**
+ * keyinput.js
+ * 
+ * This file is in charge of gather and distributing 
+ * keyinput from the user. 
+ * 
+ * @author Serj Kazar
+ */
 
 $(".add").click(function(){ 
 	addToTower(50);
@@ -70,9 +78,11 @@ $("#gameCanvas").on("mouseup", function(e) {
     }
 });
 
+/* Used to disable right click context menu */
 function onRightClick(){	
 	return false;
 }
+
 function onClick()
 {
 }
@@ -84,7 +94,12 @@ function onKeypressDoc()
 {	
 	console.log('Pressed a key when gameContent had focus!');    
 }
-
+function onLeftMouseMove(xPosScene,yPosScene){
+	moveCubes(xPosScene,yPosScene);
+}
+function onRightMouseMove(xPosScene,yPosScene){
+	updateCameraOnRightClick(xPosScene,yPosScene);
+}
 //install event handlers
 document.getElementById('gameCanvas').oncontextmenu=onRightClick;
 document.getElementById('gameCanvas').addEventListener("click", onClick, false);
