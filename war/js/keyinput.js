@@ -83,8 +83,33 @@ function onRightClick(){
 	return false;
 }
 
-function onClick()
-{
+function onClick(){
+	var x=event.clientX;
+	var y=event.clientY;
+	
+	var rect = document.getElementById('gameCanvas').getBoundingClientRect();
+	var divTop = rect.top;
+	var divRight = rect.right;
+	var divBottom = rect.bottom;
+	var divLeft = rect.left;
+	
+	var xPosInDiv = (x-divLeft);
+	var yPosInDiv = (y-divTop);
+	
+	projector = new THREE.Projector();
+
+	var vector = new THREE.Vector3( ( xPosInDiv / DIV_WIDTH ) * 2 - 1, - ( yPosInDiv / DIV_HEIGHT ) * 2 + 1, 0.5 );
+	//var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+	projector.unprojectVector( vector, mainCamera );
+
+	var raycaster = new THREE.Raycaster( mainCamera.position, vector.sub( mainCamera.position ).normalize() );
+
+	var intersects = raycaster.intersectObjects( collidableTowerList );
+
+	if ( intersects.length > 0 ) {
+		console.log("Tower clicked!");
+
+	}
 }
 function onKeypressDiv()
 {	
