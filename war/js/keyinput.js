@@ -96,20 +96,7 @@ function onClick(){
 	var xPosInDiv = (x-divLeft);
 	var yPosInDiv = (y-divTop);
 	
-	projector = new THREE.Projector();
-
-	var vector = new THREE.Vector3( ( xPosInDiv / DIV_WIDTH ) * 2 - 1, - ( yPosInDiv / DIV_HEIGHT ) * 2 + 1, 0.5 );
-	//var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
-	projector.unprojectVector( vector, mainCamera );
-
-	var raycaster = new THREE.Raycaster( mainCamera.position, vector.sub( mainCamera.position ).normalize() );
-
-	var intersects = raycaster.intersectObjects( collidableTowerList );
-
-	if ( intersects.length > 0 ) {
-		console.log("Tower clicked!");
-
-	}
+	checkTowerCollide(xPosInDiv,yPosInDiv);
 }
 function onKeypressDiv()
 {	
@@ -125,7 +112,24 @@ function onLeftMouseMove(xPosScene,yPosScene){
 function onRightMouseMove(xPosScene,yPosScene){
 	updateCameraOnRightClick(xPosScene,yPosScene);
 }
+
+function onMouseHover(){
+	var x=event.clientX;
+	var y=event.clientY;
+	
+	var rect = document.getElementById('gameCanvas').getBoundingClientRect();
+	var divTop = rect.top;
+	var divRight = rect.right;
+	var divBottom = rect.bottom;
+	var divLeft = rect.left;
+	
+	var xPosInDiv = (x-divLeft);
+	var yPosInDiv = (y-divTop);
+	
+	checkTowerHover(xPosInDiv,yPosInDiv);
+}
 //install event handlers
+document.getElementById('gameCanvas').onmousemove=onMouseHover;
 document.getElementById('gameCanvas').oncontextmenu=onRightClick;
 document.getElementById('gameCanvas').addEventListener("click", onClick, false);
 document.getElementById('gameCanvas').addEventListener("keypress", onKeypressDiv, false);
