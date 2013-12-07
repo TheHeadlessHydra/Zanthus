@@ -59,29 +59,88 @@ function removeFromList(tower){
 	}
 }
 
+/**
+ * Manipulate tower when hovered.
+ * @param towerMesh: Mesh to manipulate
+ */
+function towerHover(towerMesh){
+	towerMesh.currentHex = towerMesh.material.emissive.getHex();
+	towerMesh.material.emissive.setHex( 0xff0000 );
+}
+/**
+ * Manipulate tower when not being hovered on.
+ * @param towerMesh: Mesh to manipulate
+ */
+function towerNotHover(towerMesh){
+	towerMesh.currentHex = towerMesh.material.emissive.getHex();
+	towerMesh.material.emissive.setHex( 0x000000 );
+}
+/**
+ * Check if the hover of the mouse is over a tower piece or not, and 
+ * properly handle them if they are.
+ * - Will apply towerHover() on all tower pieces being hovered on.
+ * - Will apply towerNotHover() on all tower pieces not being hovered on. 
+ * 
+ * Current problems with this code:
+ * -- Since its checking both back and front, it hovers over 2 objects
+ *    at a time due to the FOV of the camera itself. 
+ * 
+ * @param xPosInDiv: X value of mouse in relation to div content
+ * @param yPosInDiv: Y value of mouse in relation to div content
+ */
 function checkTowerHover(xPosInDiv,yPosInDiv){
+	/* Obtain all objects currently being hovered on by the mouse*/
 	var projector = new THREE.Projector();
 	var vector = new THREE.Vector3( ( xPosInDiv / DIV_WIDTH ) * 2 - 1, - ( yPosInDiv / DIV_HEIGHT ) * 2 + 1, 0.5 );
-	//var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
 	projector.unprojectVector( vector, mainCamera );
 	var raycaster = new THREE.Raycaster( mainCamera.position, vector.sub( mainCamera.position ).normalize() );
-	/* Check each piece of the tower for a collision */
 	var intersects = raycaster.intersectObjects( towerMeshList );
 	if( intersects.length > 0 ){
-		var INTERSECTED = intersects[ 0 ].object;
-		INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-		INTERSECTED.material.emissive.setHex( 0xff0000 );
-		console.log("Tower hover!");
+		var intersectedMesh = intersects[ 0 ].object;
+		towerHover(intersectedMesh);
+	}
+	/* A hacky disjoin operation created by looping through both arrays - Will obtain all
+	 * objects currently NOT being hovered on. 
+	 * 
+	 * I cannot get comparison of three.js mesh types to give a 'true' value, 
+	 * so give up and just loop through both arrays comparing their respective
+	 * positions in the towerListArray (which is stored in the mesh object) */
+	var notHover = [];
+	for(var i = 0; i < towerMeshList.length; i++){
+		/* This loop should be 1 in length most of the time - max 2*/
+		var isIntersect = 0;
+		for(var j = 0; j < intersects.length; j++){
+			var hoverTowerPosition = intersects[j].object.towerArrayPosition;
+			var currentTowerPosition = towerMeshList[i].towerArrayPosition;
+			if(hoverTowerPosition == currentTowerPosition){
+				isIntersect = 1;
+			}
+		}
+		if(isIntersect == 0){
+			notHover.push(towerMeshList[i]);
+		}
+	}
+	/* All objects not being hovered on can apply the towerNotHover() call
+	 * **********************************************************************
+	 * - Theres a possibility to optimize this by only calling NotHover() on
+	 *   meshes that have already been set to emissive, maybe though checking 
+	 *   the hex value on the mesh emissive or a flag variable. 
+	 *   Leave it naive for now. */
+	for(var i = 0; i < notHover.length; i++){
+		towerNotHover(notHover[i]);
 	}
 }
 
+/**
+ * Checks which part of the tower was clicked and calls towerClicked() on it. 
+ * @param xPosInDiv: X value of mouse in relation to div content
+ * @param yPosInDiv: Y value of mouse in relation to div content
+ */
 function checkTowerCollide(xPosInDiv,yPosInDiv){
 	var projector = new THREE.Projector();
 	var vector = new THREE.Vector3( ( xPosInDiv / DIV_WIDTH ) * 2 - 1, - ( yPosInDiv / DIV_HEIGHT ) * 2 + 1, 0.5 );
-	//var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
 	projector.unprojectVector( vector, mainCamera );
 	var raycaster = new THREE.Raycaster( mainCamera.position, vector.sub( mainCamera.position ).normalize() );
-	/* Check each piece of the tower for a collision */
 	var intersects = raycaster.intersectObjects( towerMeshList );
 	if( intersects.length > 0 ){
 		var mesh = intersects[ 0 ].object;
@@ -89,12 +148,17 @@ function checkTowerCollide(xPosInDiv,yPosInDiv){
 		console.log("Tower clicked!");
 	}
 }
+/**
+ * Tower mesh was clicked. In this instance of a tower click, simply eliminate any climber
+ * that is colliding with the tower mesh.
+ * 
+ * @param towerMesh: Mesh that was clicked.
+ */
 function towerClicked(towerMesh){
 	/* Check if any climbers collided with the clicked tower piece */
 	for (var vertexIndex = 0; vertexIndex < towerMesh.geometry.vertices.length; vertexIndex++)
 	{      
 	    var localVertex = towerMesh.geometry.vertices[vertexIndex].clone();
-	    //var globalVertex = cube.matrix.multiplyVector3(localVertex);
 	    var globalVertex = localVertex.applyMatrix4(towerMesh.matrix);
 	    var directionVector = globalVertex.sub( towerMesh.position );
 	    var ray = new THREE.Raycaster( towerMesh.position, directionVector.clone().normalize() );
@@ -102,12 +166,8 @@ function towerClicked(towerMesh){
 	    if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
 	    {
 	    	for(var i = 0; i < collisionResults.length; i++){
-	    		console.log("KILL");
 	    		killClimber(collisionResults[i].object);
 	    	}
 	    }
 	}
-	console.log("length of climber mesh array: "+climberMeshArray.length);
-	console.log("position is: " +towerMesh.towerArrayPosition);
-	//mainScene.remove(towerMesh);
 }

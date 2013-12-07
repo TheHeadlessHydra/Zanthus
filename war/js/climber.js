@@ -22,10 +22,15 @@ function Climber(mesh){
 	this.state = 0;
 };
 
+/**
+ * Used to initialize the climbers. 
+ */
 function initClimbers(){
 	spawn();
 }
-
+/**
+ * Spawns a new mesh and begins its movement
+ */
 function spawn(){
 	var geo = new THREE.SphereGeometry(20);
 	var mat = new THREE.MeshLambertMaterial( { color: 0xf0ff00 } );
@@ -38,6 +43,11 @@ function spawn(){
 	climberArray.push(new Climber(climber));
 	climberMeshArray.push(climber);
 }
+
+/**
+ * Takes a climber mesh and completely removes it from the scene. 
+ * @param climberMesh: Mesh to kill from the scene
+ */
 function killClimber(climberMesh){
 	if(typeof climberMesh != 'undefined'){
 		console.log("Remove position: "+climberMesh.climberArrayPosition);
@@ -47,6 +57,12 @@ function killClimber(climberMesh){
 	}
 }
 
+/**
+ *  Called on each frame render - this function should be highly profiled.
+ *  
+ *  In charge of all logical checks for each climber in the climber array.  
+ *   
+ * */
 function updateClimbers(){
 	for(var i = 0; i < climberArray.length; i++){
 		var climberElement = climberArray[i];
@@ -59,7 +75,6 @@ function updateClimbers(){
 			break;
 		default:
 			console.log("unkown mode: "+climberElement.state);
-		
 		}
 	}
 	for(var i = 0; i < climberArray.length; i++){
@@ -73,7 +88,6 @@ function updateClimbers(){
 			for (var vertexIndex = 0; vertexIndex < elmnt.mesh.geometry.vertices.length; vertexIndex++)
 			{       
 			    var localVertex = elmnt.mesh.geometry.vertices[vertexIndex].clone();
-			    //var globalVertex = climber.matrix.multiplyVector3(localVertex);
 			    var globalVertex = localVertex.applyMatrix4(elmnt.mesh.matrix);
 			    var directionVector = globalVertex.sub( elmnt.mesh.position );
 			
@@ -85,7 +99,6 @@ function updateClimbers(){
 			    		climberArray[i].mesh.position.x = climberArray[i].mesh.position.x - 5;
 			    	}
 			    	climberArray[i].state = 1;
-			    	console.log("COLLIDE!");
 			    }
 			}
 		}

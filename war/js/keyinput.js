@@ -15,6 +15,7 @@ $(".add2").click(function(){
 });
 $(".item1").click(function(){ 
 	animateOne(); 
+	spawn();
 });
 $(".item2").click(function(){ 
 	animateTwo(); 
