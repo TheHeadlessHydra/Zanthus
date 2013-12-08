@@ -24,7 +24,7 @@ $(".item3").click(function(){
 	animateThree(); 
 });
 $(".erase").click(function(){ 
-	popFromList();
+	enterDestroyMode();
 });
 
 $("#gameCanvas").on("mousemove", function(e) {
@@ -64,8 +64,8 @@ $("#gameCanvas").on("mousemove", function(e) {
     	var xPosInDiv = (x-divLeft);
     	var yPosInDiv = (y-divTop);
     	
-    	var xPosScene = xPosInDiv - 250;
-    	var yPosScene = 250 - yPosInDiv;
+    	var xPosScene = xPosInDiv - (DIV_WIDTH/2);
+    	var yPosScene = (DIV_WIDTH/2) - yPosInDiv;
     	
     	onRightMouseMove(xPosScene,yPosScene);
     	console.log('Right click!');
@@ -81,10 +81,6 @@ $("#gameCanvas").on("mouseup", function(e) {
 
 /* Used to disable right click context menu */
 function onRightClick(){	
-	return false;
-}
-
-function onClick(){
 	var x=event.clientX;
 	var y=event.clientY;
 	
@@ -97,21 +93,30 @@ function onClick(){
 	var xPosInDiv = (x-divLeft);
 	var yPosInDiv = (y-divTop);
 	
-	checkTowerCollide(xPosInDiv,yPosInDiv);
+	checkTowerRightClick(xPosInDiv,yPosInDiv);
+	return false;
 }
-function onKeypressDiv()
-{	
-	console.log('Pressed a key when gameContent had focus!');    
+function onLeftClick(){
+	var x=event.clientX;
+	var y=event.clientY;
+	
+	var rect = document.getElementById('gameCanvas').getBoundingClientRect();
+	var divTop = rect.top;
+	var divRight = rect.right;
+	var divBottom = rect.bottom;
+	var divLeft = rect.left;
+	
+	var xPosInDiv = (x-divLeft);
+	var yPosInDiv = (y-divTop);
+	
+	checkTowerLeftClick(xPosInDiv,yPosInDiv);
 }
-function onKeypressDoc()
-{	
-	console.log('Pressed a key when gameContent had focus!');    
-}
+
 function onLeftMouseMove(xPosScene,yPosScene){
 	moveCubes(xPosScene,yPosScene);
 }
 function onRightMouseMove(xPosScene,yPosScene){
-	updateCameraOnRightClick(xPosScene,yPosScene);
+	updateCameraOnRightMouseMove(xPosScene,yPosScene);
 }
 
 function onMouseHover(){
@@ -129,9 +134,18 @@ function onMouseHover(){
 	
 	checkTowerHover(xPosInDiv,yPosInDiv);
 }
-//install event handlers
+function onKeypressDiv()
+{	
+	console.log('Pressed a key when gameContent had focus!');    
+}
+function onKeypressDoc()
+{	
+	console.log('Pressed a key!');    
+}
+
+/* Install event handlers */
 document.getElementById('gameCanvas').onmousemove=onMouseHover;
 document.getElementById('gameCanvas').oncontextmenu=onRightClick;
-document.getElementById('gameCanvas').addEventListener("click", onClick, false);
+document.getElementById('gameCanvas').addEventListener("click", onLeftClick, false);
 document.getElementById('gameCanvas').addEventListener("keypress", onKeypressDiv, false);
 document.addEventListener("keypress", onKeypressDoc, false);

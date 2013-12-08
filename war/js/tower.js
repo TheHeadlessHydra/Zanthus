@@ -7,27 +7,37 @@
  * @author Serj Kazar
  */
 
+/* X and Z position to add tower meshes to. 
+ * Indicates the centre position of the tower. */
 var TOWER_X = -450;
 var TOWER_Z = 0;
-
+		
 /* What X value climbers should begin climbing */
 var WHERETOCLIMB = -300;
 
-/* Type of towers*/
+/* Various types of towers*/
 var TOWER_FLING = 0;
 
-function tower(height, mesh, base, type){
+/* Type of mouse hover modes */
+var CURRENT_HOVER_MODE = 0; /* Current mode. Initialized to activate mode */
+var HOVER_ACTIVATE = 0;     /* In this mode, click a tower to activate a tower's trap */
+var HOVER_DESTROY = 1;      /* In this mode, click a tower section to destroy it  */
+
+function Tower(height, mesh, base, type){
 	this.height = height;
 	this.mesh = mesh;
 	this.base = base;
 	this.type = type;
 };
 
-towerList = [];
-towerMeshList = [];
-currentTowerHeight = 0;
+towerList = [];			/* List of Tower elements */
+towerMeshList = [];     /* List of tower meshes */
+currentTowerHeight = 0; /* Current height of the tower */
 
-
+/**
+ * Basic add of a tower mesh - Simply create a cube with the given height. 
+ * @param height
+ */
 function addToTower(height){
 	var geometry = new THREE.CubeGeometry(300,height,300,10,10,10);
 	var material = new THREE.MeshLambertMaterial( { color: 0xa74fff } );
@@ -36,10 +46,14 @@ function addToTower(height){
 	newMesh.position.y=currentTowerHeight+(height/2); // Pivot in centre of object
 	newMesh.position.z=TOWER_Z;
 	
-	addToList(new tower(height,newMesh,currentTowerHeight,TOWER_FLING));
+	addToList(new Tower(height,newMesh,currentTowerHeight,TOWER_FLING));
 	currentTowerHeight = currentTowerHeight + height;
 }
 
+/**
+ * Add a Tower element to the scene, the lists and assign its position. 
+ * @param tower: the Tower element to add to the list. 
+ */
 function addToList(tower){
 	mainScene.add(tower.mesh);
 	
@@ -49,36 +63,30 @@ function addToList(tower){
 	towerList.push(tower);
 	towerMeshList.push(tower.mesh);
 }
-function popFromList(){
-	var tower = towerList.pop();
-	if(typeof tower != 'undefined'){
-		currentTowerHeight = currentTowerHeight - tower.height;
-		mainScene.remove(tower.mesh);
-	}
-}
-function removeFromList(tower){	
-	var returnValue = towerList.indexOf(tower);
-	if(returnValue != -1){
-		towerList.splice(returnValue,1);
-	}
-}
 
 /**
- * Manipulate tower when hovered.
- * @param towerMesh: Mesh to manipulate
+ * Remove a mesh from the tower, and slide the rest of the tower down
+ * @param towerMesh: Mesh to remove
  */
-function towerHover(towerMesh){
-	towerMesh.currentHex = towerMesh.material.emissive.getHex();
-	towerMesh.material.emissive.setHex( 0xff0000 );
+function removeFromTower(towerMesh){
+	var tower = towerList[towerMesh.towerArrayPosition];
+	towerList.splice(towerMesh.towerArrayPosition,1);
+	towerMeshList.splice(towerMesh.towerArrayPosition,1);
+	currentTowerHeight = currentTowerHeight - tower.height;
+	for(var i = towerMesh.towerArrayPosition; i < towerMeshList.length; i++){
+		towerMeshList[i].position.y = towerMeshList[i].position.y - tower.height;
+		towerMeshList[i].towerArrayPosition = towerMeshList[i].towerArrayPosition - 1;
+	}
+	mainScene.remove(towerMesh);
 }
-/**
- * Manipulate tower when not being hovered on.
- * @param towerMesh: Mesh to manipulate
- */
-function towerNotHover(towerMesh){
-	towerMesh.currentHex = towerMesh.material.emissive.getHex();
-	towerMesh.material.emissive.setHex( 0x000000 );
+function enterDestroyMode(){
+	CURRENT_HOVER_MODE = HOVER_DESTROY;
 }
+
+
+////////////////////////////////////////////////////
+///
+/// Mouse Hover functions
 /**
  * Check if the hover of the mouse is over a tower piece or not, and 
  * properly handle them if they are.
@@ -93,16 +101,18 @@ function towerNotHover(towerMesh){
  * @param yPosInDiv: Y value of mouse in relation to div content
  */
 function checkTowerHover(xPosInDiv,yPosInDiv){
+	/* Optimization: Do not need to check collision if not close enough to tower. */
+	if(xPosInDiv > (DIV_WIDTH/2)){
+		return;
+	}
+	
 	/* Obtain all objects currently being hovered on by the mouse*/
 	var projector = new THREE.Projector();
 	var vector = new THREE.Vector3( ( xPosInDiv / DIV_WIDTH ) * 2 - 1, - ( yPosInDiv / DIV_HEIGHT ) * 2 + 1, 0.5 );
 	projector.unprojectVector( vector, mainCamera );
 	var raycaster = new THREE.Raycaster( mainCamera.position, vector.sub( mainCamera.position ).normalize() );
 	var intersects = raycaster.intersectObjects( towerMeshList );
-	if( intersects.length > 0 ){
-		var intersectedMesh = intersects[ 0 ].object;
-		towerHover(intersectedMesh);
-	}
+	
 	/* A hacky disjoin operation created by looping through both arrays - Will obtain all
 	 * objects currently NOT being hovered on. 
 	 * 
@@ -124,7 +134,8 @@ function checkTowerHover(xPosInDiv,yPosInDiv){
 			notHover.push(towerMeshList[i]);
 		}
 	}
-	/* All objects not being hovered on can apply the towerNotHover() call
+	/* All objects not being hovered on can apply the towerNotHover() call, and only
+	 * one object will be towerHover() at a time, forcing all others to not be hovered. 
 	 * **********************************************************************
 	 * - Theres a possibility to optimize this by only calling NotHover() on
 	 *   meshes that have already been set to emissive, maybe though checking 
@@ -133,14 +144,45 @@ function checkTowerHover(xPosInDiv,yPosInDiv){
 	for(var i = 0; i < notHover.length; i++){
 		towerNotHover(notHover[i]);
 	}
+	/* Make sure only one piece of the tower is being highlighted by
+	 * making the first element highlighted, but the remaining elements not highlighted. */
+	if(intersects.length > 0){
+		towerHover(intersects[0].object);
+	}
+	for(var i = 1; i < intersects.length; i++){
+		towerNotHover(intersects[ i ].object);
+	}
 }
-
+/**
+ * Manipulate tower when hovered.
+ * @param towerMesh: Mesh to manipulate
+ */
+function towerHover(towerMesh){
+	if(CURRENT_HOVER_MODE == HOVER_ACTIVATE){
+		towerMesh.material.emissive.setHex( 0xff0000 );
+	}
+	else if(CURRENT_HOVER_MODE == HOVER_DESTROY){
+		towerMesh.material.color.setHex( 0xae1f1f )
+	}
+}
+/**
+ * Manipulate tower when not being hovered on.
+ * @param towerMesh: Mesh to manipulate
+ */
+function towerNotHover(towerMesh){
+	towerMesh.currentHex = towerMesh.material.emissive.getHex();
+	towerMesh.material.emissive.setHex( 0x000000 );
+	towerMesh.material.color.setHex( 0xa74fff )
+}
+////////////////////////////////////////////////////
+///
+/// Mouse left click functions
 /**
  * Checks which part of the tower was clicked and calls towerClicked() on it. 
  * @param xPosInDiv: X value of mouse in relation to div content
  * @param yPosInDiv: Y value of mouse in relation to div content
  */
-function checkTowerCollide(xPosInDiv,yPosInDiv){
+function checkTowerLeftClick(xPosInDiv,yPosInDiv){
 	var projector = new THREE.Projector();
 	var vector = new THREE.Vector3( ( xPosInDiv / DIV_WIDTH ) * 2 - 1, - ( yPosInDiv / DIV_HEIGHT ) * 2 + 1, 0.5 );
 	projector.unprojectVector( vector, mainCamera );
@@ -148,8 +190,8 @@ function checkTowerCollide(xPosInDiv,yPosInDiv){
 	var intersects = raycaster.intersectObjects( towerMeshList );
 	if( intersects.length > 0 ){
 		var mesh = intersects[ 0 ].object;
-		towerClicked(mesh);
-		console.log("Tower clicked!");
+		towerLeftClicked(mesh);
+		console.log("Tower left clicked!");
 	}
 }
 /**
@@ -158,20 +200,56 @@ function checkTowerCollide(xPosInDiv,yPosInDiv){
  * 
  * @param towerMesh: Mesh that was clicked.
  */
-function towerClicked(towerMesh){
-	/* Check if any climbers collided with the clicked tower piece */
-	for (var vertexIndex = 0; vertexIndex < towerMesh.geometry.vertices.length; vertexIndex++)
-	{      
-	    var localVertex = towerMesh.geometry.vertices[vertexIndex].clone();
-	    var globalVertex = localVertex.applyMatrix4(towerMesh.matrix);
-	    var directionVector = globalVertex.sub( towerMesh.position );
-	    var ray = new THREE.Raycaster( towerMesh.position, directionVector.clone().normalize() );
-	    var collisionResults = ray.intersectObjects( climberMeshArray );
-	    if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
-	    {
-	    	for(var i = 0; i < collisionResults.length; i++){
-	    		killClimber(collisionResults[i].object);
-	    	}
-	    }
+function towerLeftClicked(towerMesh){
+	if(CURRENT_HOVER_MODE == HOVER_DESTROY){
+		/* Must destroy tower piece and slide the rest of the tower down */
+		console.log("ABOUT TO REMOVE");
+		removeFromTower(towerMesh);
+	}
+	else if(CURRENT_HOVER_MODE == HOVER_ACTIVATE){
+		/* Check if any climbers collided with the clicked tower piece */
+		for (var vertexIndex = 0; vertexIndex < towerMesh.geometry.vertices.length; vertexIndex++)
+		{      
+		    var localVertex = towerMesh.geometry.vertices[vertexIndex].clone();
+		    var globalVertex = localVertex.applyMatrix4(towerMesh.matrix);
+		    var directionVector = globalVertex.sub( towerMesh.position );
+		    var ray = new THREE.Raycaster( towerMesh.position, directionVector.clone().normalize() );
+		    var collisionResults = ray.intersectObjects( climberMeshArray );
+		    if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
+		    {
+		    	for(var i = 0; i < collisionResults.length; i++){
+		    		killClimber(collisionResults[i].object);
+		    	}
+		    }
+		}
+	}
+}
+
+////////////////////////////////////////////////////
+///
+/// Mouse right click functions
+
+function checkTowerRightClick(xPosInDiv,yPosInDiv){
+	var projector = new THREE.Projector();
+	var vector = new THREE.Vector3( ( xPosInDiv / DIV_WIDTH ) * 2 - 1, - ( yPosInDiv / DIV_HEIGHT ) * 2 + 1, 0.5 );
+	projector.unprojectVector( vector, mainCamera );
+	var raycaster = new THREE.Raycaster( mainCamera.position, vector.sub( mainCamera.position ).normalize() );
+	var intersects = raycaster.intersectObjects( towerMeshList );
+	if( intersects.length > 0 ){
+		var mesh = intersects[ 0 ].object;
+		towerRightClicked(mesh);
+		console.log("Tower right clicked!");
+	}
+	else{
+		if(CURRENT_HOVER_MODE == HOVER_DESTROY){
+			CURRENT_HOVER_MODE = HOVER_ACTIVATE;
+		}
+	}
+}
+
+function towerRightClicked(towerMesh){
+	if(CURRENT_HOVER_MODE == HOVER_DESTROY){
+		CURRENT_HOVER_MODE = HOVER_ACTIVATE;
+		towerNotHover(towerMesh);
 	}
 }

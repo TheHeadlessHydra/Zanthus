@@ -9,7 +9,7 @@
 lastX = -1;
 lastY = -1;
 cameraMovementSpeed = 5;
-function updateCameraOnRightClick(xPosScene,yPosScene){
+function updateCameraOnRightMouseMove(xPosScene,yPosScene){
 	if(lastX == -1){
 		lastX = xPosScene;
 		lastY = yPosScene;

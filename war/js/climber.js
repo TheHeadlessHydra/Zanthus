@@ -35,7 +35,9 @@ function spawn(){
 	var geo = new THREE.SphereGeometry(20);
 	var mat = new THREE.MeshLambertMaterial( { color: 0xf0ff00 } );
 	var climber = new THREE.Mesh( geo, mat );
-	climber.position.set(200,0,0);
+	
+	var randomSpawnZ = Math.floor((Math.random()*150)-150);
+	climber.position.set(200,0,randomSpawnZ);
 	mainScene.add( climber );
 	
 	/* Add a new variable to the mesh itself - its position in the climber array */
