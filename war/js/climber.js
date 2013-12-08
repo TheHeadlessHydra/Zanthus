@@ -53,6 +53,11 @@ function killClimber(climberMesh){
 		console.log("Remove position: "+climberMesh.climberArrayPosition);
 		climberArray.splice(climberMesh.climberArrayPosition,1);
 		climberMeshArray.splice(climberMesh.climberArrayPosition,1);
+		
+		/* Must update the climber array position of the rest of the climbers, as the array is being shifted down by 1 */
+		for(var i = climberMesh.climberArrayPosition; i < climberArray.length; i++ ){
+			climberMeshArray[i].climberArrayPosition = climberMeshArray[i].climberArrayPosition - 1;
+		}
 		mainScene.remove(climberMesh);
 	}
 }
@@ -69,6 +74,9 @@ function updateClimbers(){
 		switch(climberElement.state){
 		case 0:
 			climberElement.mesh.position.x = climberElement.mesh.position.x - 1;
+			if(climberElement.mesh.position.x < WHERETOCLIMB ){
+				climberArray[i].state = 1;
+			}
 			break;
 		case 1:
 			climberElement.mesh.position.y = climberElement.mesh.position.y + 1;
@@ -76,31 +84,9 @@ function updateClimbers(){
 		default:
 			console.log("unkown mode: "+climberElement.state);
 		}
-	}
-	for(var i = 0; i < climberArray.length; i++){
-		var elmnt = climberArray[i];
 		
-		/* If a climber has reached the top, its game over */
-		if(elmnt.mesh.position.y > currentTowerHeight){
+		if(climberArray[i].mesh.position.y > currentTowerHeight){
 			gameOver();
-		}
-		if(elmnt.state == 0){
-			for (var vertexIndex = 0; vertexIndex < elmnt.mesh.geometry.vertices.length; vertexIndex++)
-			{       
-			    var localVertex = elmnt.mesh.geometry.vertices[vertexIndex].clone();
-			    var globalVertex = localVertex.applyMatrix4(elmnt.mesh.matrix);
-			    var directionVector = globalVertex.sub( elmnt.mesh.position );
-			
-			    var ray = new THREE.Raycaster( elmnt.mesh.position, directionVector.clone().normalize() );
-			    var collisionResults = ray.intersectObjects( towerMeshList );
-			    if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
-			    {
-			    	if( climberArray[i].state == 0) {
-			    		climberArray[i].mesh.position.x = climberArray[i].mesh.position.x - 5;
-			    	}
-			    	climberArray[i].state = 1;
-			    }
-			}
 		}
 	}
 }

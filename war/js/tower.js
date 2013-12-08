@@ -10,6 +10,10 @@
 var TOWER_X = -450;
 var TOWER_Z = 0;
 
+/* What X value climbers should begin climbing */
+var WHERETOCLIMB = -300;
+
+/* Type of towers*/
 var TOWER_FLING = 0;
 
 function tower(height, mesh, base, type){

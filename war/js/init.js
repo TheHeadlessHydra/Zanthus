@@ -76,5 +76,6 @@ function init() {
 }
 
 function gameOver(){
+	console.log("Game over!");
 	window.cancelAnimationFrame(renderId);
 }
