@@ -22,6 +22,8 @@ var mainCamera;
 
 var renderId;
 
+var FLOOR = 0;
+
 function init() {
 
 	/**							*
@@ -66,15 +68,64 @@ function init() {
 	var groundPlane = new THREE.Mesh( geometry, material );
 	groundPlane.rotation.x=-1.57079633;
 	groundPlane.position.z=-50;
-	mainScene.add(groundPlane);
+	//mainScene.add(groundPlane);
 	
 	// Create the lights
 	var directionalLight = new THREE.HemisphereLight( 0x404040,0xffffff,2 );
     directionalLight.position.set(1, 1, 1).normalize();
     mainScene.add(directionalLight);
 
+    
+    var loader = new THREE.JSONLoader();
+	var callbackGroundplane = function ( geometry, materials ) { createScene( geometry, materials, 0, FLOOR, 0, 0 ) };
+	loader.load( "../models/test.js", callbackGroundplane );
 }
 
+function createScene( geometry, materials, x, y, z, b ) {
+
+	zmesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
+	zmesh.position.set( x, y, z );
+	zmesh.scale.set( 1, 1, 1 );
+	mainScene.add( zmesh );
+
+	//createMaterialsPalette( materials, 100, b );
+
+}
+function createMaterialsPalette( materials, size, bottom ) {
+
+	for ( var i = 0; i < materials.length; i ++ ) {
+
+		// material
+
+		mesh = new THREE.Mesh( new THREE.PlaneGeometry( size, size ), materials[i] );
+		mesh.position.x = i * (size + 5) - ( ( materials.length - 1 )* ( size + 5 )/2);
+		mesh.position.y = FLOOR + size/2 + bottom;
+		mesh.position.z = -100;
+		mainScene.add( mesh );
+
+		// number
+
+		var x = document.createElement( "canvas" );
+		var xc = x.getContext( "2d" );
+		x.width = x.height = 128;
+		xc.shadowColor = "#000";
+		xc.shadowBlur = 7;
+		xc.fillStyle = "orange";
+		xc.font = "50pt arial bold";
+		xc.fillText( i, 10, 64 );
+
+		var xm = new THREE.MeshBasicMaterial( { map: new THREE.Texture( x ), transparent: true } );
+		xm.map.needsUpdate = true;
+
+		mesh = new THREE.Mesh( new THREE.PlaneGeometry( size, size ), xm );
+		mesh.position.x = i * ( size + 5 ) - ( ( materials.length - 1 )* ( size + 5 )/2);
+		mesh.position.y = FLOOR + size/2 + bottom;
+		mesh.position.z = -99;
+		mainScene.add( mesh );
+
+	}
+
+}
 function gameOver(){
 	console.log("Game over!");
 	window.cancelAnimationFrame(renderId);
