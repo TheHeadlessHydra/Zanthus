@@ -76,18 +76,29 @@ function init() {
     mainScene.add(directionalLight);
 
     
-    var loader = new THREE.JSONLoader();
-	var callbackGroundplane = function ( geometry, materials ) { createScene( geometry, materials, 0, FLOOR, 0, 0 ) };
-	loader.load( "../models/test.js", callbackGroundplane );
+    var loader = new THREE.JSONLoader( true );
+	loader.load( "../models/test.js", function( geometry ) {
+
+		mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
+		//mesh.scale.set( 1.5, 1.5, 1.5 );
+		mainScene.add( mesh );
+
+	} );
+    
+    //var loader = new THREE.JSONLoader();
+    //loader.load( "../models/test.js", callbackGroundplane );
+	//var callbackGroundplane = function ( geometry, materials ) { createScene( geometry, materials, 0, FLOOR, 0, 0 ) };
+	//loader.load( "../models/test.js", callbackGroundplane );
+	//loader.load( "../sphere.js", createScene );
 }
 
-function createScene( geometry, materials, x, y, z, b ) {
+function createScene( geometry, materials, x, y, z, s ) {
 
 	zmesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
 	zmesh.position.set( x, y, z );
 	zmesh.scale.set( 1, 1, 1 );
 	mainScene.add( zmesh );
-
+	
 	//createMaterialsPalette( materials, 100, b );
 
 }
