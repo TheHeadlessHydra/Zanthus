@@ -18,6 +18,7 @@ $(".item1").click(function(){
 	spawn();
 });
 $(".item2").click(function(){ 
+	addFlingPiece();
 	animateTwo(); 
 });
 $(".item3").click(function(){ 

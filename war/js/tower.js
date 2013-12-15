@@ -49,6 +49,18 @@ function addToTower(height){
 	addToList(new Tower(height,newMesh,currentTowerHeight,TOWER_FLING));
 	currentTowerHeight = currentTowerHeight + height;
 }
+function addMeshToTower(newMesh, height){
+	if(typeof newMesh == 'undefined'){
+		console.log("Adding undefined mesh!!");
+		return;
+	}
+	newMesh.position.x=TOWER_X;
+	newMesh.position.y=currentTowerHeight; // Pivot in centre of object
+	newMesh.position.z=TOWER_Z;
+	
+	addToList(new Tower(height,newMesh,currentTowerHeight,TOWER_FLING));
+	currentTowerHeight = currentTowerHeight + height;
+}
 
 /**
  * Add a Tower element to the scene, the lists and assign its position. 
@@ -162,7 +174,7 @@ function towerHover(towerMesh){
 		towerMesh.material.emissive.setHex( 0xff0000 );
 	}
 	else if(CURRENT_HOVER_MODE == HOVER_DESTROY){
-		towerMesh.material.color.setHex( 0xae1f1f )
+		towerMesh.material.emissive.setHex( 0xae1f1f );
 	}
 }
 /**
@@ -172,7 +184,6 @@ function towerHover(towerMesh){
 function towerNotHover(towerMesh){
 	towerMesh.currentHex = towerMesh.material.emissive.getHex();
 	towerMesh.material.emissive.setHex( 0x000000 );
-	towerMesh.material.color.setHex( 0xa74fff )
 }
 ////////////////////////////////////////////////////
 ///
@@ -205,9 +216,12 @@ function towerLeftClicked(towerMesh){
 		/* Must destroy tower piece and slide the rest of the tower down */
 		console.log("ABOUT TO REMOVE");
 		removeFromTower(towerMesh);
-	}
+	} /* HOVER_DESTROY*/
 	else if(CURRENT_HOVER_MODE == HOVER_ACTIVATE){
-		/* Check if any climbers collided with the clicked tower piece */
+		if(towerList[towerMesh.towerArrayPosition].type == TOWER_FLING){
+			flingpiece_activate(towerMesh);
+		}
+		/* Check if any climbers collided with the clicked tower piece *//*
 		for (var vertexIndex = 0; vertexIndex < towerMesh.geometry.vertices.length; vertexIndex++)
 		{      
 		    var localVertex = towerMesh.geometry.vertices[vertexIndex].clone();
@@ -221,8 +235,8 @@ function towerLeftClicked(towerMesh){
 		    		killClimber(collisionResults[i].object);
 		    	}
 		    }
-		}
-	}
+		}*/
+	} /* HOVER_ACTIVATE*/
 }
 
 ////////////////////////////////////////////////////
