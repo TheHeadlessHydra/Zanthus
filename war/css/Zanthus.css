@@ -10,6 +10,9 @@ h1{
 	
 	/* Disable the orange highlight on colours */
 	outline-color: transparent;
+	
+	text-align: center;
+	vertical-align:center;
 }
 
 #choices{	
@@ -28,4 +31,58 @@ h1{
 }
 img{
     vertical-align: middle;
+}
+
+
+#progress {
+	color:red;
+	top:7em;
+	width: 1000px;
+	font-size:3em;
+	font-variant:small-caps;
+	font-weight:bold;
+	/*position:absolute;*/
+	position: absolute;
+	text-align: center;
+	text-shadow: #000 0px 0px 10px;
+	display: block;
+	
+	background-color:#fff;
+}
+#start {
+	color:#fff;
+	text-shadow: #000 0px 0px 2px;
+	padding:0.1em 0.3em;
+	width:3em;
+	text-align: center;
+	display:none;
+}
+#progressbar {
+	position: relative;
+	left:7.5em;
+	text-align: center;
+	background: white;
+	width: 250px;
+	height: 10px;
+}
+#bar {
+	background:#d00;
+	width:50px;
+	height:10px;
+}
+.shadow {
+	-moz-box-shadow: 0px 0px 5px #000;
+	-webkit-box-shadow: 0px 0px 5px #000;
+	box-shadow: 0px 0px 5px #000;
+}
+.enabled {
+	color: lime!important;
+	cursor:pointer;
+}
+.enabled:hover {
+	text-shadow: #0f0 0px 0px 5px !important;
+}
+.disabled {
+	background:gray;
+	cursor:default;
 }

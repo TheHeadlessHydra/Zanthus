@@ -76,10 +76,14 @@ function init() {
     mainScene.add(directionalLight);
 
     // Load meshes
-    load_flingpiece();
+    load_assets();
 }
 
 function gameOver(){
 	console.log("Game over!");
 	window.cancelAnimationFrame(renderId);
+}
+function startGame(){
+	console.log("Start game!");
+	initClimbers();		/* Initializes the climber enemy type module */
 }

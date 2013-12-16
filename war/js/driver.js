@@ -15,7 +15,6 @@ var mesh;
  * not call them, none of the variables will be shared to the modules
  * */
 init();				/* Creates the main scene and camera, allowing for the rest of the modules to use them */
-initClimbers();		/* Initializes the climber enemy type module */
 //initCubeSwap();		/* Initializes the test cubeswap module  */
 
 animate();			/* Begins the render loop */

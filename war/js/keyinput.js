@@ -14,15 +14,12 @@ $(".add2").click(function(){
 	addToTower(100);
 });
 $(".item1").click(function(){ 
-	animateOne(); 
 	spawn();
 });
 $(".item2").click(function(){ 
 	addFlingPiece();
-	animateTwo(); 
 });
 $(".item3").click(function(){ 
-	animateThree(); 
 });
 $(".erase").click(function(){ 
 	enterDestroyMode();
@@ -114,7 +111,7 @@ function onLeftClick(){
 }
 
 function onLeftMouseMove(xPosScene,yPosScene){
-	moveCubes(xPosScene,yPosScene);
+	//moveCubes(xPosScene,yPosScene);
 }
 function onRightMouseMove(xPosScene,yPosScene){
 	updateCameraOnRightMouseMove(xPosScene,yPosScene);

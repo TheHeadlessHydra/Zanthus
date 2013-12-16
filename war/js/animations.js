@@ -13,17 +13,51 @@ function updateAnimations(){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// Flingpiece animation functions
+/// Loaders
+var totalMeshesToLoad = 1;
+var currentMeshNumber = 0;
+function load_assets(){
+	document.getElementById( "progress" ).style.display = "block";
+
+	var loader = new THREE.JSONLoader( true );
+	var totalMeshes = 1;
+	loader.callbackProgress = callbackProgress;
+	loader.loadAjaxJSON(
+            loader,
+            "../models/fling_piece.js",
+            meshloader("flingpiece",totalMeshes),
+            false,
+            callbackProgress
+            );
+}
+function meshLoaded(){
+	currentMeshNumber++;
+	if(currentMeshNumber == totalMeshesToLoad){
+		startGame();
+	}
+}
+function callbackProgress( progress, result ) {
+	var bar = 250,
+	total = progress.totalModels + progress.totalTextures,
+	loaded = progress.loadedModels + progress.loadedTextures;
+	if ( progress.total )
+		bar = Math.floor( bar * progress.loaded / progress.total );
+	document.getElementById( "bar" ).style.width = bar + "px";
+}
+function meshloader(fileName,totalMeshes){
+	return function(geometry){
+		console.log("A mesh has been loaded into the scene!");
+		document.getElementById( "message" ).style.display = "none";
+		document.getElementById( "progressbar" ).style.display = "none";
+		//document.getElementById( "start" ).style.display = "block";
+		//document.getElementById( "start" ).className = "enabled";
+		flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
+		meshLoaded();
+	}
+}
+
 var flingpiece_mesh; /* The flingpiece mesh that should be cloned to place. */
 var flingpiece_height = 321.697;
-function load_flingpiece(){
-	var loader = new THREE.JSONLoader( true );
-	loader.load( "../models/fling_piece.js", function( geometry ) {
-		flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
-		//mesh.scale.set( 1.5, 1.5, 1.5 );
-		mainScene.add( mesh );
-	} );
-}
 function addFlingPiece(){
 	//var newPiece = flingpiece_mesh.clone();	
 	var newPiece = new THREE.Mesh(flingpiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) )
