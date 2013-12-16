@@ -16,7 +16,7 @@ var mesh;
  * */
 init();				/* Creates the main scene and camera, allowing for the rest of the modules to use them */
 initClimbers();		/* Initializes the climber enemy type module */
-initCubeSwap();		/* Initializes the test cubeswap module  */
+//initCubeSwap();		/* Initializes the test cubeswap module  */
 
 animate();			/* Begins the render loop */
 
@@ -29,33 +29,16 @@ function animate() {
 	
 	/* Update the various modules */
 	update();
+	updateAnimations();
 	updateClimbers(); /* Updates related to the climber enemy type */
-	updateCubeSwap(); /* Updates related to the test cubeswap system*/
+	//updateCubeSwap(); /* Updates related to the test cubeswap system*/
 	stats.update();
 	
 	render();
 }
 
 function update() {
-
-	/* Collision test! */
-	var collidableMeshList = [wall];
-	for (var vertexIndex = 0; vertexIndex < cube.geometry.vertices.length; vertexIndex++)
-	{       
-	    var localVertex = cube.geometry.vertices[vertexIndex].clone();
-	    //var globalVertex = cube.matrix.multiplyVector3(localVertex);
-	    var globalVertex = localVertex.applyMatrix4(cube.matrix);
-	    var directionVector = globalVertex.sub( cube.position );
-
-	    var ray = new THREE.Raycaster( cube.position, directionVector.clone().normalize() );
-	    var collisionResults = ray.intersectObjects( collidableMeshList );
-	    if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
-	    {
-	    	console.log("COLLIDE!");
-	    }
-	}
 }
 function render() {
-	updateAnimations();
 	renderer.render(mainScene, mainCamera);
 }

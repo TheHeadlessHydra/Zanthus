@@ -5,7 +5,6 @@ var animationList = []; /* Tracks the animations currently being played */
 
 function updateAnimations(){
 	for(var i = 0; i < animationList.length; i++){
-		console.log("animations for");
 		if(towerList[animationList[i].towerArrayPosition].type == TOWER_FLING){
 			flingpiece_animation(animationList[i]);
 		}
@@ -26,7 +25,8 @@ function load_flingpiece(){
 	} );
 }
 function addFlingPiece(){
-	var newPiece = flingpiece_mesh.clone();	
+	//var newPiece = flingpiece_mesh.clone();	
+	var newPiece = new THREE.Mesh(flingpiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) )
 	addMeshToTower(newPiece,flingpiece_height);
 }
 function flingpiece_activate(flingPiece){

@@ -162,7 +162,7 @@ function checkTowerHover(xPosInDiv,yPosInDiv){
 		towerHover(intersects[0].object);
 	}
 	for(var i = 1; i < intersects.length; i++){
-		towerNotHover(intersects[ i ].object);
+		//towerNotHover(intersects[ i ].object);
 	}
 }
 /**
@@ -214,28 +214,12 @@ function checkTowerLeftClick(xPosInDiv,yPosInDiv){
 function towerLeftClicked(towerMesh){
 	if(CURRENT_HOVER_MODE == HOVER_DESTROY){
 		/* Must destroy tower piece and slide the rest of the tower down */
-		console.log("ABOUT TO REMOVE");
 		removeFromTower(towerMesh);
 	} /* HOVER_DESTROY*/
 	else if(CURRENT_HOVER_MODE == HOVER_ACTIVATE){
 		if(towerList[towerMesh.towerArrayPosition].type == TOWER_FLING){
 			flingpiece_activate(towerMesh);
 		}
-		/* Check if any climbers collided with the clicked tower piece *//*
-		for (var vertexIndex = 0; vertexIndex < towerMesh.geometry.vertices.length; vertexIndex++)
-		{      
-		    var localVertex = towerMesh.geometry.vertices[vertexIndex].clone();
-		    var globalVertex = localVertex.applyMatrix4(towerMesh.matrix);
-		    var directionVector = globalVertex.sub( towerMesh.position );
-		    var ray = new THREE.Raycaster( towerMesh.position, directionVector.clone().normalize() );
-		    var collisionResults = ray.intersectObjects( climberMeshArray );
-		    if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
-		    {
-		    	for(var i = 0; i < collisionResults.length; i++){
-		    		killClimber(collisionResults[i].object);
-		    	}
-		    }
-		}*/
 	} /* HOVER_ACTIVATE*/
 }
 
