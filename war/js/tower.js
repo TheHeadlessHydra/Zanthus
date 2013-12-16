@@ -61,6 +61,14 @@ function addMeshToTower(newMesh, height){
 	addToList(new Tower(height,newMesh,currentTowerHeight,TOWER_FLING));
 	currentTowerHeight = currentTowerHeight + height;
 }
+function addBaseMeshToTower(newMesh, height){
+	newMesh.position.x=TOWER_X;
+	newMesh.position.y=currentTowerHeight; // Pivot in centre of object
+	newMesh.position.z=TOWER_Z;
+	//addToList(new Tower(height,newMesh,currentTowerHeight,TOWER_FLING));
+	mainScene.add(newMesh);
+	currentTowerHeight = currentTowerHeight + height;
+}
 
 /**
  * Add a Tower element to the scene, the lists and assign its position. 

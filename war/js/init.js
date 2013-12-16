@@ -85,5 +85,6 @@ function gameOver(){
 }
 function startGame(){
 	console.log("Start game!");
+	initBaseMeshes();
 	initClimbers();		/* Initializes the climber enemy type module */
 }

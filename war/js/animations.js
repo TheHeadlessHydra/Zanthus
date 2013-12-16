@@ -14,21 +14,36 @@ function updateAnimations(){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// Loaders
-var totalMeshesToLoad = 1;
+var totalMeshesToLoad = 2;
 var currentMeshNumber = 0;
+
+var flingpiece_mesh; /* The flingpiece mesh that should be cloned to place. */
+var flingpiece_height = 321.697;
+
+var basepiece_mesh; /* The flingpiece mesh that should be cloned to place. */
+var basepiece_height = 284.72;
+
 function load_assets(){
 	document.getElementById( "progress" ).style.display = "block";
 
 	var loader = new THREE.JSONLoader( true );
-	var totalMeshes = 1;
 	loader.callbackProgress = callbackProgress;
 	loader.loadAjaxJSON(
             loader,
             "../models/fling_piece.js",
-            meshloader("flingpiece",totalMeshes),
+            flingpieceloader("flingpiece"),
             false,
             callbackProgress
             );
+	loader.loadAjaxJSON(
+            loader,
+            "../models/base_piece.js",
+            basepieceloader("basepiece"),
+            false,
+            callbackProgress
+            );
+	//var loader2 = new THREE.JSONLoader( true );
+	//loader2.load("../models/base_piece.js",basepieceloader("basepiece",totalMeshes));
 }
 function meshLoaded(){
 	currentMeshNumber++;
@@ -44,7 +59,7 @@ function callbackProgress( progress, result ) {
 		bar = Math.floor( bar * progress.loaded / progress.total );
 	document.getElementById( "bar" ).style.width = bar + "px";
 }
-function meshloader(fileName,totalMeshes){
+function flingpieceloader(fileName){
 	return function(geometry){
 		console.log("A mesh has been loaded into the scene!");
 		document.getElementById( "message" ).style.display = "none";
@@ -55,12 +70,28 @@ function meshloader(fileName,totalMeshes){
 		meshLoaded();
 	}
 }
+function basepieceloader(fileName){
+	return function(geometry){
+		console.log("A mesh has been loaded into the scene!");
+		document.getElementById( "message" ).style.display = "none";
+		document.getElementById( "progressbar" ).style.display = "none";
+		//document.getElementById( "start" ).style.display = "block";
+		//document.getElementById( "start" ).className = "enabled";
+		basepiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
+		meshLoaded();
+	}
+}
 
-var flingpiece_mesh; /* The flingpiece mesh that should be cloned to place. */
-var flingpiece_height = 321.697;
+
+
+function initBaseMeshes(){
+	var basePiece = new THREE.Mesh(basepiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
+	addBaseMeshToTower(basePiece,basepiece_height);
+}
+
 function addFlingPiece(){
 	//var newPiece = flingpiece_mesh.clone();	
-	var newPiece = new THREE.Mesh(flingpiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) )
+	var newPiece = new THREE.Mesh(flingpiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
 	addMeshToTower(newPiece,flingpiece_height);
 }
 function flingpiece_activate(flingPiece){
