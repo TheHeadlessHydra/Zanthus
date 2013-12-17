@@ -23,6 +23,8 @@ var CURRENT_HOVER_MODE = 0; /* Current mode. Initialized to activate mode */
 var HOVER_ACTIVATE = 0;     /* In this mode, click a tower to activate a tower's trap */
 var HOVER_DESTROY = 1;      /* In this mode, click a tower section to destroy it  */
 
+var crystalmesh;
+
 function Tower(height, mesh, base, type){
 	this.height = height;
 	this.mesh = mesh;
@@ -48,6 +50,7 @@ function addToTower(height){
 	
 	addToList(new Tower(height,newMesh,currentTowerHeight,TOWER_FLING));
 	currentTowerHeight = currentTowerHeight + height;
+	updateTopMesh();
 }
 function addMeshToTower(newMesh, height){
 	if(typeof newMesh == 'undefined'){
@@ -60,6 +63,7 @@ function addMeshToTower(newMesh, height){
 	
 	addToList(new Tower(height,newMesh,currentTowerHeight,TOWER_FLING));
 	currentTowerHeight = currentTowerHeight + height;
+	updateTopMesh();
 }
 function addBaseMeshToTower(newMesh, height){
 	newMesh.position.x=TOWER_X;
@@ -68,8 +72,21 @@ function addBaseMeshToTower(newMesh, height){
 	//addToList(new Tower(height,newMesh,currentTowerHeight,TOWER_FLING));
 	mainScene.add(newMesh);
 	currentTowerHeight = currentTowerHeight + height;
+	updateTopMesh();
 }
-
+function addStaticMeshToTower(newMesh){
+	newMesh.position.x=TOWER_X;
+	newMesh.position.y=currentTowerHeight; // Pivot in centre of object
+	newMesh.position.z=TOWER_Z;
+	
+	mainScene.add(newMesh);
+}
+function updateTopMesh(){
+	console.log("UPDATE POSITION");
+	if(typeof crystalmesh != 'undefined'){
+		crystalmesh.position.y=currentTowerHeight;
+	}
+}
 /**
  * Add a Tower element to the scene, the lists and assign its position. 
  * @param tower: the Tower element to add to the list. 
@@ -93,6 +110,7 @@ function removeFromTower(towerMesh){
 	towerList.splice(towerMesh.towerArrayPosition,1);
 	towerMeshList.splice(towerMesh.towerArrayPosition,1);
 	currentTowerHeight = currentTowerHeight - tower.height;
+	updateTopMesh();
 	for(var i = towerMesh.towerArrayPosition; i < towerMeshList.length; i++){
 		towerMeshList[i].position.y = towerMeshList[i].position.y - tower.height;
 		towerMeshList[i].towerArrayPosition = towerMeshList[i].towerArrayPosition - 1;
