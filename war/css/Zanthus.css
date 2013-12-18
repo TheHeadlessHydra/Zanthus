@@ -2,6 +2,11 @@
 h1{
 	text-align:center;
 }
+img{
+    vertical-align: middle;
+}
+
+/* The div that the game is rendered in */
 #gameCanvas{
 	/* Border */
 	-moz-border-radius: 15px;
@@ -22,66 +27,15 @@ h1{
 	vertical-align:center;
 }
 
-#choices{	
-    height: 100%;
-    width:100%;	
-	background:#606060;
-	
-	vertical-align: middle;
-    display: inline-block;
-    text-align:center;
-	
-	margin-top:50px;
-	padding:50px;
-	padding-left:0px;
-	padding-right:0px;
-}
-#purchase_towerpieces{
-
-	width: 150px;
-	background-color:#000;
-}
-
-/**
- *	Tab, galleries, and videos
- */
-
-#tab_container{
-	width: 1100px;
-	margin: 0 auto;
-}
-
-
-#thumbnail_outer_border {
-	padding: 3px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
-	border-style: double;
-	border-color: #d9cb9e;
-	border-width: 2px;
-	width: 1067px;
-	margin: 0 auto;
-	/*background:#1e1e20;*/
-}
-
-#thumbnail_container {
-	border-style: solid;
-	border-color: #d9cb9e;
-	border-width: 3px;
-	width: 1060px;
-	text-align: center;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
-	/*background: #ddd;
-	background: rgba(217,203,128,1);
-	background: rgba(220,53,34,1);*/
-}
-
+/************************
+*  Main tab content
+*************************/
 
 #main{
 	/* Dimensions */
 	width: 90%;
 	min-width:1300px;
+	max-width:1300px;
 	height:630px;
 	/* Inner Positioning */
 	overflow: hidden;
@@ -145,7 +99,7 @@ h1{
 	padding: 10px;
 	/*background: #ff9;*/
 }
-
+/***************************************/
 
 
 #coins{
@@ -159,11 +113,9 @@ h1{
 }
 
 
-img{
-    vertical-align: middle;
-}
-
-
+/********************************
+* Progress bar and loading css
+*********************************/
 #progress {
 	color:red;
 	top:7em;
@@ -216,3 +168,4 @@ img{
 	background:gray;
 	cursor:default;
 }
+/***************************************/

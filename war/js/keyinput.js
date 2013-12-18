@@ -25,8 +25,8 @@ $(".erase").click(function(){
 	enterDestroyMode();
 });
 
-$("#gameCanvas").on("mousemove", function(e) {
-    if (e.which == 1) {	
+$("#gameCanvas").on("mousemove", function(event) {
+    if (leftClick == 1) {	
     	var x=event.clientX;
     	var y=event.clientY;
     	
@@ -43,13 +43,12 @@ $("#gameCanvas").on("mousemove", function(e) {
     	var yPosScene = 250 - yPosInDiv;
     	
     	onLeftMouseMove(xPosScene,yPosScene);
-    	//cube.position.set(xPosScene,yPosScene,-50);
-    	console.log('Div content clicked: '+xPosInDiv+' '+yPosInDiv);
+    	//console.log('Div content clicked: '+xPosInDiv+' '+yPosInDiv);
     	
         //document.getElementById('gameCanvas').innerHTML="clicked";
         document.getElementById('gameCanvas').focus();
     }
-    if(e.which == 3){
+    else if(rightClick == 1){
     	var x=event.clientX;
     	var y=event.clientY;
     	
@@ -66,19 +65,37 @@ $("#gameCanvas").on("mousemove", function(e) {
     	var yPosScene = (DIV_WIDTH/2) - yPosInDiv;
     	
     	onRightMouseMove(xPosScene,yPosScene);
-    	console.log('Right click!');
+    }
+    else{
+    	onMouseHover(event);
     }
 });
-$("#gameCanvas").on("mouseup", function(e) {
+
+var leftClick = 0;
+var rightClick = 0;
+$("#gameCanvas").on("mouseup", function(event) {
+	leftClick = 0;
+	rightClick = 0;
 	// Reset camera movement
-    if(e.which == 3){
+	if(event.which == 3){
     	lastX = -1;
     	lastY = -1;
     }
 });
+$( "#gameCanvas" ).mousedown(function(event) {
+	if(event.which == 1){
+		onLeftClick(event);
+		leftClick = 1;
+		rightClick = 0;
+	}
+	else if(event.which == 3){
+		leftClick = 0;
+		rightClick = 1;
+	}
+});
 
 /* Used to disable right click context menu */
-function onRightClick(){	
+function onRightClick(event){
 	var x=event.clientX;
 	var y=event.clientY;
 	
@@ -94,7 +111,8 @@ function onRightClick(){
 	checkTowerRightClick(xPosInDiv,yPosInDiv);
 	return false;
 }
-function onLeftClick(){
+function onLeftClick(event){
+	//event = event || window.event //For IE
 	var x=event.clientX;
 	var y=event.clientY;
 	
@@ -117,7 +135,7 @@ function onRightMouseMove(xPosScene,yPosScene){
 	updateCameraOnRightMouseMove(xPosScene,yPosScene);
 }
 
-function onMouseHover(){
+function onMouseHover(event){
 	var x=event.clientX;
 	var y=event.clientY;
 	
@@ -132,18 +150,16 @@ function onMouseHover(){
 	
 	checkTowerHover(xPosInDiv,yPosInDiv);
 }
-function onKeypressDiv()
-{	
+function onKeypressDiv(){	
 	console.log('Pressed a key when gameContent had focus!');    
 }
-function onKeypressDoc()
-{	
+function onKeypressDoc(){
 	console.log('Pressed a key!');    
 }
 
 /* Install event handlers */
-document.getElementById('gameCanvas').onmousemove=onMouseHover;
-document.getElementById('gameCanvas').oncontextmenu=onRightClick;
-document.getElementById('gameCanvas').addEventListener("click", onLeftClick, false);
+//document.getElementById('gameCanvas').onmousemove=onMouseHover;
+//document.getElementById('gameCanvas').addEventListener("click", onLeftClick, false);
+document.getElementById('gameCanvas').oncontextmenu=onRightClick; // Used to disable context - must be done through jscript not jquery
 document.getElementById('gameCanvas').addEventListener("keypress", onKeypressDiv, false);
 document.addEventListener("keypress", onKeypressDoc, false);

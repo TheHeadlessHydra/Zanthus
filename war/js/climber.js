@@ -26,12 +26,12 @@ function Climber(mesh){
  * Used to initialize the climbers. 
  */
 function initClimbers(){
-	spawn();
+	//spawnClimber();
 }
 /**
  * Spawns a new mesh and begins its movement
  */
-function spawn(){
+function spawnClimber(){
 	var geo = new THREE.SphereGeometry(20);
 	var mat = new THREE.MeshLambertMaterial( { color: 0xf0ff00 } );
 	var climber = new THREE.Mesh( geo, mat );
@@ -53,7 +53,7 @@ function spawn(){
 function killClimber(climberMesh){
 	if(typeof climberMesh != 'undefined'){
 		updateCoins(climber_cost);
-		console.log("Remove position: "+climberMesh.climberArrayPosition);
+		//console.log("Remove position: "+climberMesh.climberArrayPosition);
 		climberArray.splice(climberMesh.climberArrayPosition,1);
 		climberMeshArray.splice(climberMesh.climberArrayPosition,1);
 		
