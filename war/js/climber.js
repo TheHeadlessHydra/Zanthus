@@ -87,7 +87,7 @@ function updateClimbers(){
 			console.log("unkown mode: "+climberElement.state);
 		}
 		
-		if(climberArray[i].mesh.position.y > currentTowerHeight){
+		if(climberArray[i].mesh.position.y > currentTowerHeight+topPiece_crystalheight){
 			gameOver();
 		}
 	}

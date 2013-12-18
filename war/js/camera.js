@@ -29,5 +29,12 @@ function updateCameraOnRightMouseMove(xPosScene,yPosScene){
 	}
 	
 	var currentY = mainCamera.position.y;
-	mainCamera.position.y = currentY + (yDiff*cameraMovementSpeed);
+	
+	var finalPositionSet = currentY + (yDiff*cameraMovementSpeed);
+	
+	/* Limit the distance in y-direction the camera is allowed to traverse */
+	if(finalPositionSet > 35){
+		mainCamera.position.y = finalPositionSet;
+	}
+	
 }

@@ -67,9 +67,8 @@ function addMeshToTower(newMesh, height){
 }
 function addBaseMeshToTower(newMesh, height){
 	newMesh.position.x=TOWER_X;
-	newMesh.position.y=currentTowerHeight; // Pivot in centre of object
+	newMesh.position.y=currentTowerHeight;
 	newMesh.position.z=TOWER_Z;
-	//addToList(new Tower(height,newMesh,currentTowerHeight,TOWER_FLING));
 	mainScene.add(newMesh);
 	currentTowerHeight = currentTowerHeight + height;
 	updateTopMesh();
@@ -81,6 +80,11 @@ function addStaticMeshToTower(newMesh){
 	
 	mainScene.add(newMesh);
 }
+function addStaticMeshToScene(newMesh){
+	mainScene.add(newMesh);
+}
+
+
 function updateTopMesh(){
 	console.log("UPDATE POSITION");
 	if(typeof crystalmesh != 'undefined'){

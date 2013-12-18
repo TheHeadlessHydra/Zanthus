@@ -24,6 +24,9 @@ var basepiece_mesh; /* The flingpiece mesh that should be cloned to place. */
 var basepiece_height = 284.72;
 
 var toppiece_mesh; /* The flingpiece mesh that should be cloned to place. */
+var topPiece_crystalheight = 129.313;
+
+var groundplane_mesh; /* The flingpiece mesh that should be cloned to place. */
 
 function load_assets(){
 	document.getElementById( "progress" ).style.display = "block";
@@ -33,40 +36,37 @@ function load_assets(){
 	loader.loadAjaxJSON(
             loader,
             "../models/fling_piece.js",
-            flingpieceloader("flingpiece"),
+            meshloader("flingpiece"),
             false,
             callbackProgress
             );
 	loader.loadAjaxJSON(
             loader,
             "../models/base_piece.js",
-            staticpieceloader("basepiece"),
+            meshloader("basepiece"),
             false,
             callbackProgress
             );
 	loader.loadAjaxJSON(
             loader,
             "../models/top_piece.js",
-            staticpieceloader("toppiece"),
+            meshloader("toppiece"),
+            false,
+            callbackProgress
+            );
+	loader.loadAjaxJSON(
+            loader,
+            "../models/groundplane.js",
+            meshloader("groundplane"),
             false,
             callbackProgress
             );
 }
-function meshLoaded(){
-	currentMeshNumber++;
-	if(currentMeshNumber == totalMeshesToLoad){
-		document.getElementById( "message" ).style.display = "none";
-		document.getElementById( "progressbar" ).style.display = "none";
-		startGame();
-	}
-}
+
 function globalProgress(bar){
 	var bar = 250;
 	var perBar = bar/totalMeshesToLoad;
-	
-	
 }
-
 function callbackProgress( progress, result ) {
 	var bar = 250;
 	if ( progress.total ){
@@ -80,15 +80,7 @@ function callbackProgress( progress, result ) {
 	document.getElementById( "bar" ).style.width = bar + "px";
 }
 
-
-function flingpieceloader(fileName){
-	return function(geometry){
-		console.log("A mesh has been loaded into the scene!");
-		flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
-		meshLoaded();
-	}
-}
-function staticpieceloader(fileName){
+function meshloader(fileName){
 	return function(geometry){
 		console.log("A mesh has been loaded into the scene!");
 		if(fileName == "basepiece"){
@@ -97,22 +89,45 @@ function staticpieceloader(fileName){
 		else if(fileName == "toppiece"){
 			toppiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0xffffff } ) );
 		}
+		else if(fileName == "groundplane"){
+			groundplane_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0xffffff } ) );
+		}
+		else if(fileName == "flingpiece"){
+			flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
+		}
 		meshLoaded();
 	}
 }
+function meshLoaded(){
+	currentMeshNumber++;
+	if(currentMeshNumber == totalMeshesToLoad){
+		document.getElementById( "message" ).style.display = "none";
+		document.getElementById( "progressbar" ).style.display = "none";
+		startGame();
+	}
+}
+
+
 function initBaseMeshes(){
 	var basePiece = new THREE.Mesh(basepiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
 	addBaseMeshToTower(basePiece,basepiece_height);
 	
 	crystalmesh = new THREE.Mesh(toppiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
 	addStaticMeshToTower(crystalmesh);
+	
+	var groundplane = new THREE.Mesh(groundplane_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
+	addStaticMeshToScene(groundplane);
 }
 
 function addFlingPiece(){
-	//var newPiece = flingpiece_mesh.clone();	
 	var newPiece = new THREE.Mesh(flingpiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
 	addMeshToTower(newPiece,flingpiece_height);
 }
+
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Flingpiece animations
 function flingpiece_activate(flingPiece){
 	flingPiece.speed = 2;           /* Slows down the animation the higher it goes. 1 = Regular speed, 2 = 2x slower, etc */
 	flingPiece.padTimer = 0;        /* Internal variable to slow down animation*/
