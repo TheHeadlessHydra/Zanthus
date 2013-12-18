@@ -16,7 +16,7 @@ $(".add2").click(function(){
 $(".item1").click(function(){ 
 	spawn();
 });
-$(".item2").click(function(){ 
+$(".addflingpiece").click(function(){ 
 	addFlingPiece();
 });
 $(".item3").click(function(){ 

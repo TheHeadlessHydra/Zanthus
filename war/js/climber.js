@@ -8,7 +8,7 @@
 var climberMeshArray = [];
 var climberArray = [];
 var climber;
-
+var climber_cost = 50;
 /**
  * create a Climber enemy type. It has these modes:
  * 0: Moving towards the tower.
@@ -52,6 +52,7 @@ function spawn(){
  */
 function killClimber(climberMesh){
 	if(typeof climberMesh != 'undefined'){
+		updateCoins(climber_cost);
 		console.log("Remove position: "+climberMesh.climberArrayPosition);
 		climberArray.splice(climberMesh.climberArrayPosition,1);
 		climberMeshArray.splice(climberMesh.climberArrayPosition,1);

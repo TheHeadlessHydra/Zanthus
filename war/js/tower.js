@@ -80,13 +80,22 @@ function addStaticMeshToTower(newMesh){
 	
 	mainScene.add(newMesh);
 }
+function addFlingPiece(){
+	/* Only allow if the player has enough coins */
+	
+	if(updateCoins(-flingpiece_cost)){
+		var newPiece = new THREE.Mesh(flingpiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
+		addMeshToTower(newPiece,flingpiece_height);
+	}
+}
+
+
 function addStaticMeshToScene(newMesh){
 	mainScene.add(newMesh);
 }
 
 
 function updateTopMesh(){
-	console.log("UPDATE POSITION");
 	if(typeof crystalmesh != 'undefined'){
 		crystalmesh.position.y=currentTowerHeight;
 	}

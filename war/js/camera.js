@@ -33,7 +33,7 @@ function updateCameraOnRightMouseMove(xPosScene,yPosScene){
 	var finalPositionSet = currentY + (yDiff*cameraMovementSpeed);
 	
 	/* Limit the distance in y-direction the camera is allowed to traverse */
-	if(finalPositionSet > 35){
+	if(finalPositionSet > 35 && finalPositionSet < currentTowerHeight+100){
 		mainCamera.position.y = finalPositionSet;
 	}
 	

@@ -7,6 +7,9 @@
 	
 	<link href="css/Zanthus.css" rel="stylesheet" type="text/css"></link>
 	
+	<!-- fonts -->
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Iceland">
+	
 	<!-- libs -->
 	<script type="text/javascript" src="lib/jquery.min.js"></script>
 	<script type="text/javascript" src="lib/three.min.js"></script>
@@ -25,24 +28,41 @@
     </noscript>
 
 	<h1>Demo Game</h1>
-	<div id="gameCanvas" tabindex="0">
-		<div id="progress">
-			<span id="message">Loading ...</span>
-			<div id="progressbar" class="shadow"><div id="bar" class="shadow"></div></div>
-			<div id="start" class="disabled">Start</div>
+
+
+	<div id="main">
+		<div id="columns-header">
+			<div id="coins">
+			<img src="images/coin.png" class="addflingpiece"></img>
+			<span id="total_coins">500</span>
+			</div>
+		</div>
+		<div id="column-1">
+		</div>
+	<div id="content-2">
+		<div id="column-2">
+			<div id="gameCanvas" tabindex="0">
+				<div id="progress">
+					<span id="message">Loading ...</span>
+					<div id="progressbar" class="shadow"><div id="bar" class="shadow"></div></div>
+					<div id="start" class="disabled">Start</div>
+				</div>
+			</div>
+		</div>
+		<div id="column-3">
+			<img src="images/flingpiece_icon.png" class="addflingpiece"></img>
+			<img src="images/add.png" class="add"></img>
+			<img src="images/add.png" class="add2"></img>
+			<img src="images/add.png" class="add3"></img>
+			<img src="images/content.png" class="item1"></img>
+			<img src="images/content.png" class="item2"></img>
+			<img src="images/content.png" class="item3"></img>
+			<img src="images/erase.png" class="erase"></img>
 		</div>
 	</div>
-	
-	<div id="choices">
-		<img src="images/add.png" class="add"></img>
-		<img src="images/add.png" class="add2"></img>
-		<img src="images/add.png" class="add3"></img>
-		<img src="images/content.png" class="item1"></img>
-		<img src="images/content.png" class="item2"></img>
-		<img src="images/content.png" class="item3"></img>
-		<img src="images/erase.png" class="erase"></img>
-	</div>
-	
+</div> <!-- main -->
+
+
 	<!-- This ordering is very important! Be careful with it.
 		 You will almost always want init to go first, and driver last -->
 	<script type="text/javascript" src="js/util.js"></script>
@@ -51,6 +71,8 @@
 	<script type="text/javascript" src="js/tower.js"></script>
 	<script type="text/javascript" src="js/climber.js"></script>
 	<script type="text/javascript" src="js/animations.js"></script>
+	<script type="text/javascript" src="js/gamelogic.js"></script>
+	<script type="text/javascript" src="js/loader.js"></script>
 	<script type="text/javascript" src="js/keyinput.js"></script>
 	<script type="text/javascript" src="js/driver.js"></script>
 	

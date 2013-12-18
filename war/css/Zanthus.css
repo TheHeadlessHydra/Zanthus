@@ -3,6 +3,13 @@ h1{
 	text-align:center;
 }
 #gameCanvas{
+	/* Border */
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	border-style: solid;
+	border-color: #1e1e20;
+	border-width: 5px;
+	
 	margin:0 auto;
 	background-color:#123456;
 	width:1000px;
@@ -29,6 +36,129 @@ h1{
 	padding-left:0px;
 	padding-right:0px;
 }
+#purchase_towerpieces{
+
+	width: 150px;
+	background-color:#000;
+}
+
+/**
+ *	Tab, galleries, and videos
+ */
+
+#tab_container{
+	width: 1100px;
+	margin: 0 auto;
+}
+
+
+#thumbnail_outer_border {
+	padding: 3px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	border-style: double;
+	border-color: #d9cb9e;
+	border-width: 2px;
+	width: 1067px;
+	margin: 0 auto;
+	/*background:#1e1e20;*/
+}
+
+#thumbnail_container {
+	border-style: solid;
+	border-color: #d9cb9e;
+	border-width: 3px;
+	width: 1060px;
+	text-align: center;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	/*background: #ddd;
+	background: rgba(217,203,128,1);
+	background: rgba(220,53,34,1);*/
+}
+
+
+#main{
+	/* Dimensions */
+	width: 90%;
+	min-width:1300px;
+	height:630px;
+	/* Inner Positioning */
+	overflow: hidden;
+	display:block;
+	margin: 0 auto;
+	padding:1px;
+	padding-top:0px;
+	/* Border */
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	border-style: solid;
+	border-color: #1e1e20;
+	border-width: 3px;
+	/* Background Color */
+	background:#878787;
+}
+
+#head {
+	padding: 10px;
+	/*background: #fdd;*/
+}
+#sub_head{
+	padding-top:40px;
+	padding-bottom:3px;
+	float:left;
+	margin-left:50px;
+}
+#sub_head p.subtitle{
+	padding-top:3px;
+	padding-bottom:3px;
+	margin-left:30px;
+}
+
+#column-1 {
+	float: left;
+	/*width: 300px;*/
+	padding: 10px;
+	/*background: #bfb;*/
+}
+
+#column-2 {
+	width:1000px;
+	height:600px;
+	float: left;
+	padding: 10px;
+	/*background: #ddf;*/
+}
+
+#column-3 {
+	overflow: auto; 
+	height: 600px;
+	
+	float: right;
+	width: 220px;
+	padding: 10px;
+	/*background: #dff;*/
+}
+
+#footer {
+	clear: both;
+	padding: 10px;
+	/*background: #ff9;*/
+}
+
+
+
+#coins{
+	float:right;
+}
+#total_coins{
+	font-family: 'Iceland', serif;
+	font-size: 35px;
+	letter-spacing: 3px;
+	color: #000;
+}
+
+
 img{
     vertical-align: middle;
 }

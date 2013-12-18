@@ -22,8 +22,6 @@ var mainCamera;
 
 var renderId;
 
-var FLOOR = 0;
-
 function init() {
 
 	/**							*
@@ -77,14 +75,4 @@ function init() {
 
     // Load meshes
     load_assets();
-}
-
-function gameOver(){
-	console.log("Game over!");
-	window.cancelAnimationFrame(renderId);
-}
-function startGame(){
-	console.log("Start game!");
-	initBaseMeshes();
-	initClimbers();		/* Initializes the climber enemy type module */
 }

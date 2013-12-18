@@ -1,43 +1,107 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// Loaders
+var totalMeshesToLoad = 3;
+var currentMeshNumber = 0;
 
+var flingpiece_mesh; /* The flingpiece mesh that should be cloned to place. */
+var flingpiece_height = 321.697;
+var flingpiece_cost = 200;
 
-function handle_update( result, pieces ) {
-	//refreshSceneView( result );
-	//renderer.initWebGLObjects( result.scene );
-	var m, material, count = 0;
-	for ( m in result.materials ) {
-		material = result.materials[ m ];
-		if ( ! ( material instanceof THREE.MeshFaceMaterial || material instanceof THREE.ShaderMaterial || material.morphTargets ) ) {
-			if( !material.program ) {
-				renderer.initMaterial( material, result.scene.__lights, result.scene.fog );
-				count += 1;
-				if( count > pieces ) {
-					//console.log("xxxxxxxxx");
-					break;
-				}
-			}
+var basepiece_mesh; /* The flingpiece mesh that should be cloned to place. */
+var basepiece_height = 284.72;
+
+var toppiece_mesh; /* The flingpiece mesh that should be cloned to place. */
+var topPiece_crystalheight = 129.313;
+
+var groundplane_mesh; /* The flingpiece mesh that should be cloned to place. */
+
+function load_assets(){
+	document.getElementById( "progress" ).style.display = "block";
+
+	var loader = new THREE.JSONLoader( true );
+	loader.callbackProgress = callbackProgress;
+	loader.loadAjaxJSON(
+            loader,
+            "../models/fling_piece.js",
+            meshloader("flingpiece"),
+            false,
+            callbackProgress
+            );
+	loader.loadAjaxJSON(
+            loader,
+            "../models/base_piece.js",
+            meshloader("basepiece"),
+            false,
+            callbackProgress
+            );
+	loader.loadAjaxJSON(
+            loader,
+            "../models/top_piece.js",
+            meshloader("toppiece"),
+            false,
+            callbackProgress
+            );
+	loader.loadAjaxJSON(
+            loader,
+            "../models/groundplane.js",
+            meshloader("groundplane"),
+            false,
+            callbackProgress
+            );
+}
+
+function globalProgress(bar){
+	var bar = 250;
+	var perBar = bar/totalMeshesToLoad;
+}
+function callbackProgress( progress, result ) {
+	var bar = 250;
+	if ( progress.total ){
+		bar = Math.floor( bar * progress.loaded / progress.total );
+	}
+	var curBarWidth = document.getElementById( "bar" ).style.width;
+	//var toadd = (curBarWidth + (bar/totalMeshesToLoad));
+	//curBarWidth/totalMeshesToLoad-bar/totalMeshesToLoad
+	//console.log("ITS: "+toadd);
+	//document.getElementById( "bar" ).style.width = curBarWidth + (bar/totalMeshesToLoad) + "px";
+	document.getElementById( "bar" ).style.width = bar + "px";
+}
+
+function meshloader(fileName){
+	return function(geometry){
+		console.log("A mesh has been loaded into the scene!");
+		if(fileName == "basepiece"){
+			basepiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0xffffff } ) );
 		}
+		else if(fileName == "toppiece"){
+			toppiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0xffffff } ) );
+		}
+		else if(fileName == "groundplane"){
+			groundplane_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0xffffff } ) );
+		}
+		else if(fileName == "flingpiece"){
+			flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
+		}
+		meshLoaded();
+	}
+}
+function meshLoaded(){
+	currentMeshNumber++;
+	if(currentMeshNumber == totalMeshesToLoad){
+		document.getElementById( "message" ).style.display = "none";
+		document.getElementById( "progressbar" ).style.display = "none";
+		startGame();
 	}
 }
 
-var callbackProgress = function( progress, result ) {
-
-	var bar = 250,
-	total = progress.totalModels + progress.totalTextures,
-	loaded = progress.loadedModels + progress.loadedTextures;
-	if ( total )
-		bar = Math.floor( bar * loaded / total );
-	document.getElementById( "bar" ).style.width = bar + "px";
-	count = 0;
-	for ( var m in result.materials ) count++;
-		handle_update( result, Math.floor( count/total ) );
-}
-
-var callbackFinished = function ( result ) {
-	loaded = result;
-	document.getElementById( "message" ).style.display = "none";
-	document.getElementById( "progressbar" ).style.display = "none";
-	document.getElementById( "start" ).style.display = "block";
-	document.getElementById( "start" ).className = "enabled";
-	//handle_update( result, 1 );
-	flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
+function initBaseMeshes(){
+	var basePiece = new THREE.Mesh(basepiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
+	addBaseMeshToTower(basePiece,basepiece_height);
+	
+	crystalmesh = new THREE.Mesh(toppiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
+	addStaticMeshToTower(crystalmesh);
+	
+	var groundplane = new THREE.Mesh(groundplane_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
+	addStaticMeshToScene(groundplane);
 }
