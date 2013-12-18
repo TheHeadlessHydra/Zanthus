@@ -139,10 +139,16 @@ function flingpiece_activate(flingPiece){
 	
 	var botY = flingPiece.position.y;
 	var topY = botY + flingpiece_height;
+	var shouldBeDead = [];
 	for(var i = 0; i < climberMeshArray.length; i++){
 		if(climberMeshArray[i].position.y > botY && climberMeshArray[i].position.y < topY){
-			killClimber(climberMeshArray[i]);
+			shouldBeDead.push(i);
 		}
+	}
+	/* Must be removed backwards from the list to avoid kill problems 
+	 * with multiple deaths due to splicing of the array */
+	for(var i = (shouldBeDead.length-1); i >= 0; i--){
+		killClimber(climberMeshArray[shouldBeDead[i]]);
 	}
 }
 function flingpiece_animation(flingPiece) {
