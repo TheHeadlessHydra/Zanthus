@@ -16,7 +16,7 @@ var TOWER_Z = 0;
 var WHERETOCLIMB = -300;
 
 /* Various types of towers*/
-var TOWER_FLING = 0;
+var TOWER_FLING = 0; var TOWER_FLING_COOLDOWN = 15000;
 
 /* Type of mouse hover modes */
 var CURRENT_HOVER_MODE = 0; /* Current mode. Initialized to activate mode */
@@ -30,6 +30,7 @@ function Tower(height, mesh, base, type){
 	this.mesh = mesh;
 	this.base = base;
 	this.type = type;
+	this.onCooldown = 0;
 };
 
 towerList = [];			/* List of Tower elements */
@@ -256,10 +257,19 @@ function towerLeftClicked(towerMesh){
 		removeFromTower(towerMesh);
 	} /* HOVER_DESTROY*/
 	else if(CURRENT_HOVER_MODE == HOVER_ACTIVATE){
-		if(towerList[towerMesh.towerArrayPosition].type == TOWER_FLING){
+		var towerContainer = towerList[towerMesh.towerArrayPosition];
+		if(towerContainer.type == TOWER_FLING && towerContainer.onCooldown == 0){
 			flingpiece_activate(towerMesh);
+			towerOnCooldown(towerContainer);
+			setTimeout(function() {towerOffCooldown(towerContainer);},TOWER_FLING_COOLDOWN);
 		}
 	} /* HOVER_ACTIVATE*/
+}
+function towerOffCooldown(tower){
+	tower.onCooldown = 0;
+}
+function towerOnCooldown(tower){
+	tower.onCooldown = 1;
 }
 
 ////////////////////////////////////////////////////
@@ -275,7 +285,7 @@ function checkTowerRightClick(xPosInDiv,yPosInDiv){
 	if( intersects.length > 0 ){
 		var mesh = intersects[ 0 ].object;
 		towerRightClicked(mesh);
-		console.log("Tower right clicked!");
+		//console.log("Tower right clicked!");
 	}
 	else{
 		if(CURRENT_HOVER_MODE == HOVER_DESTROY){
