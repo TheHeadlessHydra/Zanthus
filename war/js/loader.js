@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// Loaders
-var totalMeshesToLoad = 3;
+var totalMeshesToLoad = 4;
 var currentMeshNumber = 0;
 
 var flingpiece_mesh; /* The flingpiece mesh that should be cloned to place. */
@@ -46,7 +46,7 @@ function load_assets(){
             loader,
             "../models/groundplane.js",
             meshloader("groundplane"),
-            false,
+            "../models",
             callbackProgress
             );
 }
@@ -69,7 +69,7 @@ function callbackProgress( progress, result ) {
 }
 
 function meshloader(fileName){
-	return function(geometry){
+	return function(geometry, materials){
 		console.log("A mesh has been loaded into the scene!");
 		if(fileName == "basepiece"){
 			basepiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0xffffff } ) );
@@ -78,7 +78,11 @@ function meshloader(fileName){
 			toppiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0xffffff } ) );
 		}
 		else if(fileName == "groundplane"){
-			groundplane_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0xffffff } ) );
+			groundplane_mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
+			groundplane_mesh.material.color.texture.wrapS = THREE.RepeatWrapping;
+			//groundplane_mesh.material.texture.wrapT = THREE.RepeatWrapping;
+			//groundplane_mesh.material.texture.repeat.x = 1000;
+			//groundplane_mesh.material.texture.repeat.y = 1000;
 		}
 		else if(fileName == "flingpiece"){
 			flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
@@ -86,6 +90,7 @@ function meshloader(fileName){
 		meshLoaded();
 	}
 }
+
 function meshLoaded(){
 	currentMeshNumber++;
 	if(currentMeshNumber == totalMeshesToLoad){
@@ -102,6 +107,9 @@ function initBaseMeshes(){
 	crystalmesh = new THREE.Mesh(toppiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
 	addStaticMeshToTower(crystalmesh);
 	
-	var groundplane = new THREE.Mesh(groundplane_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
-	addStaticMeshToScene(groundplane);
+	//var groundplane = new THREE.Mesh(groundplane_mesh.geometry,  new THREE.MeshLambertMaterial( { color: 0x00FFCC } ));
+	//crystalmesh = new THREE.Mesh(toppiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
+	//var groundplane = new THREE.Mesh( groundplane_mesh.geometry, groundplane_mesh.material );
+	//addStaticMeshToScene(groundplane);
+	addStaticMeshToScene(groundplane_mesh);
 }
