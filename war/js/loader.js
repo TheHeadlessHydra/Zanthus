@@ -30,9 +30,9 @@ function load_assets(){
             );
 	loader.loadAjaxJSON(
             loader,
-            "../models/base_piece.js",
+            "../models/basepiece.js",
             meshloader("basepiece"),
-            false,
+            "../models",
             callbackProgress
             );
 	loader.loadAjaxJSON(
@@ -72,17 +72,33 @@ function meshloader(fileName){
 	return function(geometry, materials){
 		console.log("A mesh has been loaded into the scene!");
 		if(fileName == "basepiece"){
-			basepiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0xffffff } ) );
+			var image = new Image();
+		    image.onload = function () { texture.needsUpdate = true; };
+		    image.src = "models/brick_poster.png";
+			var texture  = new THREE.Texture( image, new THREE.UVMapping(), THREE.RepeatWrapping, THREE.RepeatWrapping );
+			texture.repeat.x = 8;
+			texture.repeat.y = 8;
+			for(var i = 0; i < materials.length; i++){
+				if(materials[i].name=="topCylinderBrick"){
+					materials[i] = new THREE.MeshLambertMaterial( { map: texture } );
+				}
+			}
+			basepiece_mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
 		}
 		else if(fileName == "toppiece"){
 			toppiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0xffffff } ) );
 		}
 		else if(fileName == "groundplane"){
-			groundplane_mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
-			groundplane_mesh.material.color.texture.wrapS = THREE.RepeatWrapping;
-			//groundplane_mesh.material.texture.wrapT = THREE.RepeatWrapping;
-			//groundplane_mesh.material.texture.repeat.x = 1000;
-			//groundplane_mesh.material.texture.repeat.y = 1000;
+			var image = new Image();
+		    image.onload = function () { texture.needsUpdate = true; };
+		    image.src = "models/grass_posterized.png";
+			var texture  = new THREE.Texture( image, new THREE.UVMapping(), THREE.RepeatWrapping, THREE.RepeatWrapping );
+			//var grassTex = new THREE.ImageUtils.loadTexture("models/Grass0100_7_S.jpg");
+			//grassTex.wrapS = THREE.RepeatWrapping;
+			//grassTex.wrapT = THREE.RepeatWrapping;
+			texture.repeat.x = 30;
+			texture.repeat.y = 30;
+			groundplane_mesh = new THREE.Mesh( geometry,  new THREE.MeshLambertMaterial( { map: texture } ) );
 		}
 		else if(fileName == "flingpiece"){
 			flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
@@ -101,8 +117,8 @@ function meshLoaded(){
 }
 
 function initBaseMeshes(){
-	var basePiece = new THREE.Mesh(basepiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
-	addBaseMeshToTower(basePiece,basepiece_height);
+	//var basePiece = new THREE.Mesh(basepiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0xdeadbeef } ) );
+	addBaseMeshToTower(basepiece_mesh,basepiece_height);
 	
 	crystalmesh = new THREE.Mesh(toppiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
 	addStaticMeshToTower(crystalmesh);
