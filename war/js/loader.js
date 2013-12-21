@@ -72,7 +72,7 @@ function meshloader(fileName){
 	return function(geometry, materials){
 		console.log("A mesh has been loaded into the scene!");
 		if(fileName == "basepiece"){
-			var image = new Image();
+			/*var image = new Image();
 		    image.onload = function () { texture.needsUpdate = true; };
 		    image.src = "models/brick_poster.png";
 			var texture  = new THREE.Texture( image, new THREE.UVMapping(), THREE.RepeatWrapping, THREE.RepeatWrapping );
@@ -82,7 +82,7 @@ function meshloader(fileName){
 				if(materials[i].name=="topCylinderBrick"){
 					materials[i] = new THREE.MeshLambertMaterial( { map: texture } );
 				}
-			}
+			}*/
 			basepiece_mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
 		}
 		else if(fileName == "toppiece"){
