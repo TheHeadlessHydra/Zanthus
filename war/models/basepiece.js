@@ -546,7 +546,7 @@
 	{
 		"DbgColor" : 15597568,
 		"DbgIndex" : 1,
-		"DbgName" : "lambert4.010",
+		"DbgName" : "topCylinderBrick",
 		"blending" : "NormalBlending",
 		"colorAmbient" : [0.6400000190734865, 0.6400000190734865, 0.6400000190734865],
 		"colorDiffuse" : [0.6400000190734865, 0.6400000190734865, 0.6400000190734865],
@@ -555,8 +555,11 @@
 		"depthWrite" : true,
 		"mapDiffuse" : "brick-ornate.png",
 		"mapDiffuseWrap" : ["repeat", "repeat"],
+		"mapNormal" : "brick-ornate_normal.png",
+		"mapNormalFactor" : 5.0,
+		"mapNormalWrap" : ["repeat", "repeat"],
 		"shading" : "Lambert",
-		"specularCoef" : 50,
+		"specularCoef" : 10,
 		"transparency" : 1.0,
 		"transparent" : false,
 		"vertexColors" : false
