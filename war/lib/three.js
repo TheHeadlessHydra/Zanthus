@@ -10365,7 +10365,6 @@ THREE.Loader.prototype = {
 			where[ name ].sourceFile = sourceFile;
 
 			if( repeat ) {
-
 				where[ name ].repeat.set( repeat[ 0 ], repeat[ 1 ] );
 
 				if ( repeat[ 0 ] !== 1 ) where[ name ].wrapS = THREE.RepeatWrapping;

@@ -18,7 +18,9 @@ var groundplane_mesh; /* The flingpiece mesh that should be cloned to place. */
 
 function load_assets(){
 	document.getElementById( "progress" ).style.display = "block";
-
+	
+	//loadGlobalTextures();
+	
 	var loader = new THREE.JSONLoader( true );
 	loader.callbackProgress = callbackProgress;
 	loader.loadAjaxJSON(
@@ -32,7 +34,7 @@ function load_assets(){
             loader,
             "../models/basepiece.js",
             meshloader("basepiece"),
-            "../models",
+            "../models/textures",
             callbackProgress
             );
 	loader.loadAjaxJSON(
@@ -46,7 +48,7 @@ function load_assets(){
             loader,
             "../models/groundplane.js",
             meshloader("groundplane"),
-            "../models",
+            "../models/textures",
             callbackProgress
             );
 }
@@ -83,22 +85,19 @@ function meshloader(fileName){
                              materials[i] = new THREE.MeshLambertMaterial( { map: texture } );
                      }
             }*/
+			for(var i = 0; i < materials.length; i++){
+                 if(materials[i].name=="grass"){
+                         //materials[i] = grassMaterial;
+                 }
+			}
 			basepiece_mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
 		}
 		else if(fileName == "toppiece"){
 			toppiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0xffffff } ) );
 		}
 		else if(fileName == "groundplane"){
-			var image = new Image();
-		    image.onload = function () { texture.needsUpdate = true; };
-		    image.src = "models/grass_posterized.png";
-			var texture  = new THREE.Texture( image, new THREE.UVMapping(), THREE.RepeatWrapping, THREE.RepeatWrapping );
-			//var grassTex = new THREE.ImageUtils.loadTexture("models/Grass0100_7_S.jpg");
-			//grassTex.wrapS = THREE.RepeatWrapping;
-			//grassTex.wrapT = THREE.RepeatWrapping;
-			texture.repeat.x = 30;
-			texture.repeat.y = 30;
-			groundplane_mesh = new THREE.Mesh( geometry,  new THREE.MeshLambertMaterial( { map: texture } ) );
+			groundplane_mesh = new THREE.Mesh( geometry,  materials[0]);
+			//groundplane_mesh = new THREE.Mesh( geometry,  grassMaterial);
 		}
 		else if(fileName == "flingpiece"){
 			flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
@@ -129,6 +128,103 @@ function initBaseMeshes(){
 	//addStaticMeshToScene(groundplane);
 	addStaticMeshToScene(groundplane_mesh);
 }
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////
+////
+//// UNDER CONSTRUCTION
+
+var grassMaterial;
+var grassUniforms;
+var grassShader;
+var grassTex;
+var grassImage;
+
+var brickGrayMaterial;
+var brickOrangeMaterial;
+
+function loadGlobalTextures(){
+	
+	grassImage = new Image(); grassImage.onload = function () { grassTex.needsUpdate = true; }; grassImage.src = "models/textures/grass_diffuse.png";
+	grassTex  = new THREE.Texture( grassImage, new THREE.UVMapping(), THREE.RepeatWrapping, THREE.RepeatWrapping ); grassTex.repeat.x = 3; grassTex.repeat.y = 3;
+	
+	grassNImage = new Image(); grassNImage.onload = function () { grassNTex.needsUpdate = true; }; grassNImage.src = "models/textures/grass_normal.png";
+	grassNTex  = new THREE.Texture( grassNImage, new THREE.UVMapping(), THREE.RepeatWrapping, THREE.RepeatWrapping ); grassNTex.repeat.x = 3; grassNTex.repeat.y = 3;
+	
+	var color= 0x050505, ambient = 0x050505, diffuse = 0x331100, specular = 0xffffff, shininess = 10, scale = 23;
+
+	// normal map shader
+
+	var shader = THREE.ShaderLib[ "normalmap" ];
+	var uniforms = THREE.UniformsUtils.clone( shader.uniforms );
+
+	uniforms[ "enableDiffuse" ].value = true;
+	uniforms[ "enableAO" ].value = false;
+	uniforms[ "enableSpecular" ].value = false;
+	uniforms[ "enableReflection" ].value = false;
+	uniforms[ "enableDisplacement" ].value = false;
+
+	uniforms[ "tDiffuse" ].value = grassTex;
+	uniforms[ "tNormal" ].value = grassNTex;
+	uniforms[ "tAO" ].value = grassTex;
+
+	uniforms[ "tDisplacement" ].value = grassTex;
+	uniforms[ "uDisplacementBias" ].value = - 0.428408;
+	uniforms[ "uDisplacementScale" ].value = 2.436143;
+
+	uniforms[ "uNormalScale" ].value.y = -1.0;
+	uniforms[ "uNormalScale" ] = 5.0;
+	uniforms[ "uDiffuseColor" ].value.setHex( diffuse );
+	uniforms[ "uSpecularColor" ].value.setHex( specular );
+	uniforms[ "uAmbientColor" ].value.setHex( 0x000000 );
+
+	uniforms[ "uShininess" ].value = 0;
+	uniforms[ "uReflectivity" ].value = 0.0;
+
+	uniforms[ "uDiffuseColor" ].value.convertGammaToLinear();
+	uniforms[ "uSpecularColor" ].value.convertGammaToLinear();
+	uniforms[ "uAmbientColor" ].value.convertGammaToLinear();
+	
+	var parameters = { fragmentShader: shader.fragmentShader, vertexShader: shader.vertexShader, uniforms: uniforms, lights: true, fog: false };
+	console.log("MATERIAL MADE");
+	//grassMaterial = new THREE.ShaderMaterial( parameters );
+	grassMaterial = new THREE.MeshLambertMaterial( {
+		map: grassTex,
+		normalMap: new THREE.Texture( "models/textures/grass_normal.png" )
+	} );
+
+	/*
+	grassMaterial = new THREE.MeshLambertMaterial( { 
+		map: grassTex,
+		normalMap: grassNTex
+	} );
+
+	
+	brickGrayImage = new Image();brickGrayImage.onload = function () { texture.needsUpdate = true; };
+	image.src = "models/grass_posterized.png";
+	brickOrangeImage = new Image(); brickOrangeImage.onload = function () { texture.needsUpdate = true; };
+	
+	
+	var image = new Image();
+    image.onload = function () { texture.needsUpdate = true; };
+    image.src = "models/grass_posterized.png";
+	var texture  = new THREE.Texture( image, new THREE.UVMapping(), THREE.RepeatWrapping, THREE.RepeatWrapping );
+	//var grassTex = new THREE.ImageUtils.loadTexture("models/Grass0100_7_S.jpg");
+	//grassTex.wrapS = THREE.RepeatWrapping;
+	//grassTex.wrapT = THREE.RepeatWrapping;
+	texture.repeat.x = 30;
+	texture.repeat.y = 30;*/
+}
+
 
 /**
  * -- UNDER CONSTRUCTION --
