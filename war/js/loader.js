@@ -6,6 +6,7 @@ var currentMeshNumber = 0;
 
 var flingpiece_mesh; /* The flingpiece mesh that should be cloned to place. */
 var flingpiece_height = 321.697;
+var flingpiece_materials;
 var flingpiece_cost = 200;
 
 var basepiece_mesh; /* The flingpiece mesh that should be cloned to place. */
@@ -25,9 +26,9 @@ function load_assets(){
 	loader.callbackProgress = callbackProgress;
 	loader.loadAjaxJSON(
             loader,
-            "../models/fling_piece.js",
+            "../models/flingpiece.js",
             meshloader("flingpiece"),
-            false,
+            "../models/textures",
             callbackProgress
             );
 	loader.loadAjaxJSON(
@@ -39,9 +40,9 @@ function load_assets(){
             );
 	loader.loadAjaxJSON(
             loader,
-            "../models/top_piece.js",
+            "../models/toppiece.js",
             meshloader("toppiece"),
-            false,
+            "../models/textures",
             callbackProgress
             );
 	loader.loadAjaxJSON(
@@ -93,14 +94,19 @@ function meshloader(fileName){
 			basepiece_mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
 		}
 		else if(fileName == "toppiece"){
-			toppiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0xffffff } ) );
+			crystalmesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
 		}
 		else if(fileName == "groundplane"){
-			groundplane_mesh = new THREE.Mesh( geometry,  materials[0]);
-			//groundplane_mesh = new THREE.Mesh( geometry,  grassMaterial);
+			//groundplane_mesh = new THREE.Mesh( geometry,  materials[0]);
+			groundplane_mesh = new THREE.Mesh( geometry,  new THREE.MeshFaceMaterial( materials ));
 		}
 		else if(fileName == "flingpiece"){
-			flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
+			//flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
+			for(var i = 0; i < materials.length; i++){
+				materials[i].morphTargets = true;
+			}
+			flingpiece_materials = materials;
+			flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
 		}
 		meshLoaded();
 	}
@@ -119,11 +125,13 @@ function initBaseMeshes(){
 	//var basePiece = new THREE.Mesh(basepiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0xdeadbeef } ) );
 	addBaseMeshToTower(basepiece_mesh,basepiece_height);
 	
-	crystalmesh = new THREE.Mesh(toppiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
+	//crystalmesh = new THREE.Mesh(toppiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
+	//crystalmesh = new THREE.Mesh(toppiece_mesh.geometry, toppiece_mesh.materials );
 	addStaticMeshToTower(crystalmesh);
 	
 	//var groundplane = new THREE.Mesh(groundplane_mesh.geometry,  new THREE.MeshLambertMaterial( { color: 0x00FFCC } ));
 	//crystalmesh = new THREE.Mesh(toppiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
+	
 	//var groundplane = new THREE.Mesh( groundplane_mesh.geometry, groundplane_mesh.material );
 	//addStaticMeshToScene(groundplane);
 	addStaticMeshToScene(groundplane_mesh);

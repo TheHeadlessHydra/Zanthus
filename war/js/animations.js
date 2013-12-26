@@ -38,6 +38,7 @@ function flingpiece_activate(flingPiece){
 	}
 }
 function flingpiece_animation(flingPiece) {
+	console.log("Animation");
 	flingPiece.padTimer++;
 	if(flingPiece.padTimer == flingPiece.speed){
 		flingPiece.padTimer = 0;

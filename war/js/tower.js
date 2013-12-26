@@ -23,8 +23,16 @@ var CURRENT_HOVER_MODE = 0; /* Current mode. Initialized to activate mode */
 var HOVER_ACTIVATE = 0;     /* In this mode, click a tower to activate a tower's trap */
 var HOVER_DESTROY = 1;      /* In this mode, click a tower section to destroy it  */
 
-var crystalmesh;
+var crystalmesh; /* This is the top piece of the tower that must remain at the top as you add height to the tower. */
 
+/**
+ * A Tower structure that defines all information needed to track a tower piece.
+ * @param height
+ * @param mesh
+ * @param base
+ * @param type
+ * @returns
+ */
 function Tower(height, mesh, base, type){
 	this.height = height;
 	this.mesh = mesh;
@@ -38,7 +46,8 @@ towerMeshList = [];     /* List of tower meshes */
 currentTowerHeight = 0; /* Current height of the tower */
 
 /**
- * Basic add of a tower mesh - Simply create a cube with the given height. 
+ * TEST FUNCTION USE ONLY - Adds a basic purple destructible cube to the tower 
+ * with the given height. 
  * @param height
  */
 function addToTower(height){
@@ -53,6 +62,12 @@ function addToTower(height){
 	currentTowerHeight = currentTowerHeight + height;
 	updateTopMesh();
 }
+/**
+ * Adds a mesh to the tower, updates the currentTowerHeight and adds it to the list
+ * of destructible towers
+ * @param newMesh: Mesh to add to the tower
+ * @param height: Height of the added mesh
+ */
 function addMeshToTower(newMesh, height){
 	if(typeof newMesh == 'undefined'){
 		console.log("Adding undefined mesh!!");
@@ -66,6 +81,12 @@ function addMeshToTower(newMesh, height){
 	currentTowerHeight = currentTowerHeight + height;
 	updateTopMesh();
 }
+/**
+ * Adds a mesh to the tower, updates the currentTowerHeight to compensate but DOES NOT add it to the list
+ * of destructible tower pieces. This will make an indestructible tower piece. 
+ * @param newMesh
+ * @param height
+ */
 function addBaseMeshToTower(newMesh, height){
 	newMesh.position.x=TOWER_X;
 	newMesh.position.y=currentTowerHeight;
@@ -74,6 +95,10 @@ function addBaseMeshToTower(newMesh, height){
 	currentTowerHeight = currentTowerHeight + height;
 	updateTopMesh();
 }
+/**
+ * Simply add a mesh to the tower, but DO NOT increase the currentTowerHeight to compensate
+ * @param newMesh: Mesh to add to the tower
+ */
 function addStaticMeshToTower(newMesh){
 	newMesh.position.x=TOWER_X;
 	newMesh.position.y=currentTowerHeight; // Pivot in centre of object
@@ -81,21 +106,34 @@ function addStaticMeshToTower(newMesh){
 	
 	mainScene.add(newMesh);
 }
+/**
+ * Adds a new flingpiece object to the top of the tower
+ */
 function addFlingPiece(){
 	/* Only allow if the player has enough coins */
-	
 	if(updateCoins(-flingpiece_cost)){
-		var newPiece = new THREE.Mesh(flingpiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
+		/* Duplicate the flingpiece material for each added flingpiece, allowing each one to change their emissive values seperately */
+		var newMaterials = [];
+		for(var i = 0; i < flingpiece_materials.length; i++){
+			newMaterials.push( flingpiece_materials[i].clone() );
+		}
+		var newPiece = new THREE.Mesh(flingpiece_mesh.geometry, new THREE.MeshFaceMaterial( newMaterials ) );
 		addMeshToTower(newPiece,flingpiece_height);
 	}
 }
 
-
+/**
+ * Simply adds a mesh to the scene.
+ * @param newMesh: Mesh to add.
+ */
 function addStaticMeshToScene(newMesh){
 	mainScene.add(newMesh);
 }
 
-
+/**
+ * Update the top mesh of the tower after the currentTowerHeight changes. It will reposition
+ * the top mesh according to the new height. 
+ */
 function updateTopMesh(){
 	if(typeof crystalmesh != 'undefined'){
 		crystalmesh.position.y=currentTowerHeight;
@@ -211,10 +249,16 @@ function checkTowerHover(xPosInDiv,yPosInDiv){
  */
 function towerHover(towerMesh){
 	if(CURRENT_HOVER_MODE == HOVER_ACTIVATE){
-		towerMesh.material.emissive.setHex( 0xff0000 );
+		for(var i = 0; i < towerMesh.material.materials.length; i++){
+			towerMesh.material.materials[i].emissive.setHex( 0xff0000 );
+		}
+		//towerMesh.material.emissive.setHex( 0xff0000 );
 	}
 	else if(CURRENT_HOVER_MODE == HOVER_DESTROY){
-		towerMesh.material.emissive.setHex( 0xae1f1f );
+		for(var i = 0; i < towerMesh.material.materials.length; i++){
+			towerMesh.material.materials[i].emissive.setHex( 0xae1f1f );
+		}
+		//towerMesh.material.emissive.setHex( 0xae1f1f );
 	}
 }
 /**
@@ -222,8 +266,12 @@ function towerHover(towerMesh){
  * @param towerMesh: Mesh to manipulate
  */
 function towerNotHover(towerMesh){
-	towerMesh.currentHex = towerMesh.material.emissive.getHex();
-	towerMesh.material.emissive.setHex( 0x000000 );
+	for(var i = 0; i < towerMesh.material.materials.length; i++){
+		towerMesh.currentHex = towerMesh.material.materials[i].emissive.getHex();
+		towerMesh.material.materials[i].emissive.setHex( 0x000000 );
+	}
+	//towerMesh.currentHex = towerMesh.material.emissive.getHex();
+	//towerMesh.material.emissive.setHex( 0x000000 );
 }
 ////////////////////////////////////////////////////
 ///
