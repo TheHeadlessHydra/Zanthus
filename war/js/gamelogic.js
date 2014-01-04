@@ -21,7 +21,7 @@ function updateCoins(addOrSub){
 		document.getElementById( "total_coins" ).innerHTML = total_coins;
 		return 1;
 	}
-	else if(addOrSub < 0 && total_coins+addOrSub > 0){
+	else if(addOrSub < 0 && total_coins+addOrSub >= 0){
 		total_coins += addOrSub;
 		document.getElementById( "total_coins" ).innerHTML = total_coins;
 		return 1;
@@ -41,20 +41,43 @@ function updateCoins(addOrSub){
  *       linearly.
 
  */
-var timeUntilNextWave = 5000;
+var waveTimeMax = 30000;
+var timeUntilNextWave = 10000;
 var waveIncrease = 5000;
 
-var wave_constant = 5;
+var wave_max = 20;
+var wave_constant = 3;
 var curWaveCount = 5;
-
+/*
 function updateWave(){
 	console.log("Warning! Incoming wave!");
 	
 	for(var i = 0; i < curWaveCount; i++){
-		setTimeout(spawnClimber, Math.floor((Math.random()*10000)+500));
+		//setTimeout(spawnClimber, Math.floor((Math.random()*10000)+500));
+		setTimeout(spawnTurtle, Math.floor((Math.random()*10000)+500));
 	}
 	curWaveCount += wave_constant;
 	
 	timeUntilNextWave += waveIncrease;
+	setTimeout(updateWave,timeUntilNextWave);
+}*/
+function updateWave(){
+	console.log("Warning! Incoming wave!");
+	
+	for(var i = 0; i < curWaveCount; i++){
+		//setTimeout(spawnClimber, Math.floor((Math.random()*10000)+500));
+		setTimeout(spawnTurtle, Math.floor((Math.random()*timeUntilNextWave)+500));
+	}
+	curWaveCount += wave_constant;
+	if(curWaveCount > wave_max){
+		curWaveCount = wave_max;
+	}
+	
+	timeUntilNextWave += waveIncrease;
+	if(timeUntilNextWave > waveTimeMax){
+		timeUntilNextWave = waveTimeMax;
+	}
+	
+	
 	setTimeout(updateWave,timeUntilNextWave);
 }

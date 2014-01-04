@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// Loaders
-var totalMeshesToLoad = 4;
+var totalMeshesToLoad = 6;
 var currentMeshNumber = 0;
 
 var flingpiece_mesh; /* The flingpiece mesh that should be cloned to place. */
@@ -16,6 +16,12 @@ var toppiece_mesh; /* The flingpiece mesh that should be cloned to place. */
 var topPiece_crystalheight = 129.313;
 
 var groundplane_mesh; /* The flingpiece mesh that should be cloned to place. */
+
+var turtle_mesh;
+var turtle_materials;
+
+var bgmountains_mesh;
+
 
 function load_assets(){
 	document.getElementById( "progress" ).style.display = "block";
@@ -52,6 +58,20 @@ function load_assets(){
             "../models/textures",
             callbackProgress
             );
+	loader.loadAjaxJSON(
+            loader,
+            "../models/climber.js",
+            meshloader("turtle"),
+            "../models/textures",
+            callbackProgress
+            );
+	loader.loadAjaxJSON(
+            loader,
+            "../models/mountainline.js",
+            meshloader("mountainline"),
+            "../models/textures",
+            callbackProgress
+            );
 }
 
 function globalProgress(bar){
@@ -75,38 +95,34 @@ function meshloader(fileName){
 	return function(geometry, materials){
 		console.log("A mesh has been loaded into the scene!");
 		if(fileName == "basepiece"){
-			/*var image = new Image();
-            image.onload = function () { texture.needsUpdate = true; };
-            image.src = "models/brick_poster.png";
-            var texture  = new THREE.Texture( image, new THREE.UVMapping(), THREE.RepeatWrapping, THREE.RepeatWrapping );
-            texture.repeat.x = 8;
-            texture.repeat.y = 8;
-            for(var i = 0; i < materials.length; i++){
-                     if(materials[i].name=="topCylinderBrick"){
-                             materials[i] = new THREE.MeshLambertMaterial( { map: texture } );
-                     }
-            }*/
-			for(var i = 0; i < materials.length; i++){
-                 if(materials[i].name=="grass"){
-                         //materials[i] = grassMaterial;
-                 }
-			}
 			basepiece_mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
 		}
 		else if(fileName == "toppiece"){
 			crystalmesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
 		}
 		else if(fileName == "groundplane"){
-			//groundplane_mesh = new THREE.Mesh( geometry,  materials[0]);
 			groundplane_mesh = new THREE.Mesh( geometry,  new THREE.MeshFaceMaterial( materials ));
 		}
 		else if(fileName == "flingpiece"){
-			//flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060, morphTargets: true } ) );
 			for(var i = 0; i < materials.length; i++){
 				materials[i].morphTargets = true;
 			}
 			flingpiece_materials = materials;
 			flingpiece_mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
+		}
+		else if(fileName == "turtle"){
+			for(var i = 0; i < materials.length; i++){
+				materials[i].morphTargets = true;
+			}
+			turtle_materials = materials;
+			turtle_mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
+			turtle_mesh.scale.set(0.1,0.1,0.1);
+		}
+		else if(fileName == "mountainline"){
+			for(var i = 0; i < materials.length; i++){
+				//materials[i].transparent = true;
+			}
+			bgmountains_mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
 		}
 		meshLoaded();
 	}
@@ -122,19 +138,14 @@ function meshLoaded(){
 }
 
 function initBaseMeshes(){
-	//var basePiece = new THREE.Mesh(basepiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0xdeadbeef } ) );
 	addBaseMeshToTower(basepiece_mesh,basepiece_height);
-	
-	//crystalmesh = new THREE.Mesh(toppiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
-	//crystalmesh = new THREE.Mesh(toppiece_mesh.geometry, toppiece_mesh.materials );
 	addStaticMeshToTower(crystalmesh);
-	
-	//var groundplane = new THREE.Mesh(groundplane_mesh.geometry,  new THREE.MeshLambertMaterial( { color: 0x00FFCC } ));
-	//crystalmesh = new THREE.Mesh(toppiece_mesh.geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
-	
-	//var groundplane = new THREE.Mesh( groundplane_mesh.geometry, groundplane_mesh.material );
-	//addStaticMeshToScene(groundplane);
 	addStaticMeshToScene(groundplane_mesh);
+	addStaticMeshToScene(bgmountains_mesh);
+	
+	//addStaticMeshToScene(climber_mesh);
+	//climber_mesh.position.y = 100;
+	//test_activate(climber_mesh);
 }
 
 

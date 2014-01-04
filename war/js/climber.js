@@ -36,7 +36,7 @@ function spawnClimber(){
 	var mat = new THREE.MeshLambertMaterial( { color: 0xf0ff00 } );
 	var climber = new THREE.Mesh( geo, mat );
 	
-	var randomSpawnZ = Math.floor((Math.random()*150)-150);
+	var randomSpawnZ = Math.floor((Math.random()*300)-0);
 	climber.position.set(200,0,randomSpawnZ);
 	mainScene.add( climber );
 	
@@ -44,6 +44,32 @@ function spawnClimber(){
 	climber.climberArrayPosition = climberArray.length;
 	climberArray.push(new Climber(climber));
 	climberMeshArray.push(climber);
+}
+/**
+ * Spwan a new turtle climber
+ */
+function spawnTurtle(){
+	/* Only allow if the player has enough coins */
+	/* Duplicate the flingpiece material for each added flingpiece, allowing each one to change their emissive values seperately */
+	var newMaterials = [];
+	for(var i = 0; i < turtle_materials.length; i++){
+		newMaterials.push( turtle_materials[i].clone() );
+	}
+	var newPiece = new THREE.Mesh(turtle_mesh.geometry, new THREE.MeshFaceMaterial( newMaterials ) );
+	
+	var randomSpawnZ = Math.floor((Math.random()*150)-150);
+	newPiece.position.set(200,0,randomSpawnZ);
+	newPiece.scale.set(0.4,0.4,0.4);
+	newPiece.rotation.y=Math.PI/2;
+	mainScene.add( newPiece );
+	
+	/* Add a new variable to the mesh itself - its position in the climber array */
+	newPiece.climberArrayPosition = climberArray.length;
+	newPiece.state = 0;
+	climberArray.push(new Climber(newPiece));
+	climberMeshArray.push(newPiece);
+	
+	turtle_animate(newPiece);
 }
 
 /**
@@ -61,6 +87,8 @@ function killClimber(climberMesh){
 		for(var i = climberMesh.climberArrayPosition; i < climberArray.length; i++ ){
 			climberMeshArray[i].climberArrayPosition = climberMeshArray[i].climberArrayPosition - 1;
 		}
+		
+		killAnimation(climberMesh);
 		mainScene.remove(climberMesh);
 	}
 }
@@ -72,6 +100,7 @@ function killClimber(climberMesh){
  *   
  * */
 function updateClimbers(){
+	/*
 	for(var i = 0; i < climberArray.length; i++){
 		var climberElement = climberArray[i];
 		switch(climberElement.state){
@@ -91,5 +120,5 @@ function updateClimbers(){
 		if(climberArray[i].mesh.position.y > currentTowerHeight+topPiece_crystalheight){
 			gameOver();
 		}
-	}
+	}*/
 }

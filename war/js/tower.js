@@ -13,7 +13,7 @@ var TOWER_X = -450;
 var TOWER_Z = 0;
 		
 /* What X value climbers should begin climbing */
-var WHERETOCLIMB = -300;
+var WHERETOCLIMB = -280;
 
 /* Various types of towers*/
 var TOWER_FLING = 0; var TOWER_FLING_COOLDOWN = 15000;
