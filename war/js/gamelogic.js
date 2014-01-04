@@ -1,4 +1,4 @@
-var total_coins = 500;
+var total_coins = 50000;
 var game_started = 0;
 
 

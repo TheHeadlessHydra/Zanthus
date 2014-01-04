@@ -36,6 +36,8 @@ function init() {
 	//mainCamera.rotation.x = -0.2;
 	mainScene = new THREE.Scene();
 	mainScene.add( mainCamera );
+	//mainScene.fog = new THREE.FogExp2( 0xefd1b5, 0.00025 );
+	mainScene.fog = new THREE.FogExp2( 0xefd1b5, 0.0001 );
 
 
 	/**							*

@@ -120,9 +120,11 @@ function meshloader(fileName){
 		}
 		else if(fileName == "mountainline"){
 			for(var i = 0; i < materials.length; i++){
-				//materials[i].transparent = true;
+				materials[i].transparent = true;
 			}
 			bgmountains_mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
+			//bgmountains_mesh.scale.set(0.5,0.5,0.5);
+			//bgmountains_mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x606060 } ) );
 		}
 		meshLoaded();
 	}
