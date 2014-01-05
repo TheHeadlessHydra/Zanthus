@@ -19,11 +19,11 @@ var DIV_HEIGHT = 600;
 
 var mainScene;
 var mainCamera;
-//var renderer;
+var renderer;
 
-//var backgroundScene;
-//var backgroundCamera;
-//var backgroundRenderer;
+var backgroundScene;
+var backgroundCamera;
+var backgroundRenderer;
 
 function init() {
 
@@ -43,14 +43,14 @@ function init() {
 	//mainScene.fog = new THREE.FogExp2( 0xefd1b5, 0.00015 );
 	
 	//backgroundCamera = new THREE.PerspectiveCamera(25, DIV_WIDTH / DIV_HEIGHT, 1,10000);
-	//backgroundCamera = new THREE.OrthographicCamera( DIV_WIDTH / - 2, DIV_WIDTH / 2, DIV_HEIGHT / 2, DIV_HEIGHT / - 2, 1, 100000000 );
+	backgroundCamera = new THREE.OrthographicCamera( DIV_WIDTH / - 2, DIV_WIDTH / 2, DIV_HEIGHT / 2, DIV_HEIGHT / - 2, 1, 100000000 );
 	//backgroundCamera.position.z = 2200;
 	//backgroundCamera.position.y = 350;
 	//mainCamera.position.z = 2200;
 	//mainCamera.position.y = 350;
 	//mainCamera.rotation.x = -0.2;
-	//backgroundScene = new THREE.Scene();
-	//backgroundScene.add( backgroundCamera );
+	backgroundScene = new THREE.Scene();
+	backgroundScene.add( backgroundCamera );
 	//mainScene.fog = new THREE.FogExp2( 0xefd1b5, 0.00025 );
 	//mainScene.fog = new THREE.FogExp2( 0xefd1b5, 0.00015 );
 

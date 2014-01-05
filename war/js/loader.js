@@ -145,10 +145,13 @@ function initBaseMeshes(){
 	addStaticMeshToScene(groundplane_mesh);
 	addStaticMeshToScene(bgmountains_mesh);	
 
-	//var bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(500, 500, 1, 1), new THREE.MeshLambertMaterial( { color: 0xffffff } ));
-	//bgPlane.material.side = THREE.DoubleSide;
+	var bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(10000, 10000, 1, 1), new THREE.MeshLambertMaterial( { color: 0xffffff } ));
+	bgPlane.material.side = THREE.DoubleSide;
+	bgPlane.position.z = -7000;
 	//backgroundCamera.add(bgPlane);
 	//backgroundScene.add(bgPlane);
+	mainCamera.add(bgPlane);
+	mainScene.add(bgPlane);
 	//backgroundScene.add(new THREE.AmbientLight(0x000044));
 	
 	
