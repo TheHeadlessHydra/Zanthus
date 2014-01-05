@@ -143,7 +143,16 @@ function initBaseMeshes(){
 	addBaseMeshToTower(basepiece_mesh,basepiece_height);
 	addStaticMeshToTower(crystalmesh);
 	addStaticMeshToScene(groundplane_mesh);
-	addStaticMeshToScene(bgmountains_mesh);
+	addStaticMeshToScene(bgmountains_mesh);	
+
+	//var bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(500, 500, 1, 1), new THREE.MeshLambertMaterial( { color: 0xffffff } ));
+	//bgPlane.material.side = THREE.DoubleSide;
+	//backgroundCamera.add(bgPlane);
+	//backgroundScene.add(bgPlane);
+	//backgroundScene.add(new THREE.AmbientLight(0x000044));
+	
+	
+	//mainScene.add(bgPlane);
 	
 	//addStaticMeshToScene(climber_mesh);
 	//climber_mesh.position.y = 100;

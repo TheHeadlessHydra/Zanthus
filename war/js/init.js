@@ -19,8 +19,11 @@ var DIV_HEIGHT = 600;
 
 var mainScene;
 var mainCamera;
+//var renderer;
 
-var renderId;
+//var backgroundScene;
+//var backgroundCamera;
+//var backgroundRenderer;
 
 function init() {
 
@@ -37,7 +40,19 @@ function init() {
 	mainScene = new THREE.Scene();
 	mainScene.add( mainCamera );
 	//mainScene.fog = new THREE.FogExp2( 0xefd1b5, 0.00025 );
-	mainScene.fog = new THREE.FogExp2( 0xefd1b5, 0.0001 );
+	//mainScene.fog = new THREE.FogExp2( 0xefd1b5, 0.00015 );
+	
+	//backgroundCamera = new THREE.PerspectiveCamera(25, DIV_WIDTH / DIV_HEIGHT, 1,10000);
+	//backgroundCamera = new THREE.OrthographicCamera( DIV_WIDTH / - 2, DIV_WIDTH / 2, DIV_HEIGHT / 2, DIV_HEIGHT / - 2, 1, 100000000 );
+	//backgroundCamera.position.z = 2200;
+	//backgroundCamera.position.y = 350;
+	//mainCamera.position.z = 2200;
+	//mainCamera.position.y = 350;
+	//mainCamera.rotation.x = -0.2;
+	//backgroundScene = new THREE.Scene();
+	//backgroundScene.add( backgroundCamera );
+	//mainScene.fog = new THREE.FogExp2( 0xefd1b5, 0.00025 );
+	//mainScene.fog = new THREE.FogExp2( 0xefd1b5, 0.00015 );
 
 
 	/**							*
@@ -61,14 +76,6 @@ function init() {
 	stats.domElement.style.left = '0px';
 	stats.domElement.style.top = '0px';
 	document.getElementById('gameCanvas').appendChild(stats.domElement);
-
-	/* Create the ground plane */
-	var geometry = new THREE.PlaneGeometry(2000,1000,50,50);
-	var material = new THREE.MeshLambertMaterial( { color: 0xa74040 } );
-	var groundPlane = new THREE.Mesh( geometry, material );
-	groundPlane.rotation.x=-1.57079633;
-	groundPlane.position.z=-50;
-	//mainScene.add(groundPlane);
 	
 	// Create the lights
 	var directionalLight = new THREE.HemisphereLight( 0x404040,0xffffff,2 );

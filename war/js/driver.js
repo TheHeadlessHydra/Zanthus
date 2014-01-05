@@ -39,5 +39,7 @@ function animate() {
 function update() {
 }
 function render() {
+	//renderer.render(backgroundScene, backgroundCamera);
 	renderer.render(mainScene, mainCamera);
+	//renderer.render(backgroundScene, backgroundCamera);
 }
