@@ -9,6 +9,14 @@ var climberMeshArray = [];
 var climberArray = [];
 var climber;
 var climber_cost = 50;
+
+
+/**
+ * Height of various enemies
+ */
+var turtleHeight = 72;
+
+
 /**
  * create a Climber enemy type. It has these modes:
  * 0: Moving towards the tower.

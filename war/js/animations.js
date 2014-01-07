@@ -47,7 +47,8 @@ function flingpiece_activate(flingPiece){
 	var topY = botY + flingpiece_height;
 	var shouldBeDead = [];
 	for(var i = 0; i < climberMeshArray.length; i++){
-		if(climberMeshArray[i].position.y > botY && climberMeshArray[i].position.y < topY){
+		if( (climberMeshArray[i].position.y > botY && climberMeshArray[i].position.y < topY) ||
+			(climberMeshArray[i].position.y+turtleHeight > botY && climberMeshArray[i].position.y+turtleHeight < topY)	){
 			shouldBeDead.push(i);
 		}
 	}

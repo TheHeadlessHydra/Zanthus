@@ -35,6 +35,7 @@ function updateCameraOnRightMouseMove(xPosScene,yPosScene){
 	/* Limit the distance in y-direction the camera is allowed to traverse */
 	if(finalPositionSet > 35 && finalPositionSet < currentTowerHeight+100){
 		mainCamera.position.y = finalPositionSet;
+		bgPlane.position.y = finalPositionSet; /* Move background plane with the camera */ 
 	}
 	
 }

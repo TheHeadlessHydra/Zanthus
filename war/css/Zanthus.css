@@ -51,6 +51,7 @@ img{
 	border-width: 3px;
 	/* Background Color */
 	background:#878787;
+	background-image:url('../images/ui/ui-back.png');
 }
 
 #head {
@@ -85,12 +86,18 @@ img{
 }
 
 #column-3 {
+	padding: 10px;
+	padding-top:50px;
+	
+	text-align:center;
+	vertical-align:center;
+	
 	overflow: auto; 
 	height: 600px;
 	
-	float: right;
+	float: left;
 	width: 220px;
-	padding: 10px;
+	
 	/*background: #dff;*/
 }
 
@@ -99,19 +106,41 @@ img{
 	padding: 10px;
 	/*background: #ff9;*/
 }
+
+.listElement{
+	padding:10px;
+}
 /***************************************/
 
+/********************************
+* Select Boxes
+*********************************/
+#addflingpiece{
+	margin: 0 auto;
+	width:200px;
+	height:200px;
+	background:url('../images/flingpiece_icon.png') no-repeat center;
+}
+#addflingpiece:hover{
+	margin: 0 auto;
+	width:200px;
+	height:200px;
+	background:url('../images/flingpiece_icon-glow.png') no-repeat center;
+}
 
 #coins{
 	float:right;
 }
 #total_coins{
 	font-family: 'Iceland', serif;
-	font-size: 35px;
+	font-size: 50px;
 	letter-spacing: 3px;
-	color: #000;
+	color: #e8ddad;
 }
-
+#coin_image{
+	margin: 0 auto;
+	padding:0px;
+}
 
 /********************************
 * Progress bar and loading css

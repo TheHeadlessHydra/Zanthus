@@ -118,6 +118,8 @@ function addFlingPiece(){
 			newMaterials.push( flingpiece_materials[i].clone() );
 		}
 		var newPiece = new THREE.Mesh(flingpiece_mesh.geometry, new THREE.MeshFaceMaterial( newMaterials ) );
+		
+		addToList(new Tower(flingpiece_height,newPiece,currentTowerHeight,TOWER_FLING));
 		addMeshToTower(newPiece,flingpiece_height);
 	}
 }
@@ -249,8 +251,11 @@ function checkTowerHover(xPosInDiv,yPosInDiv){
  */
 function towerHover(towerMesh){
 	if(CURRENT_HOVER_MODE == HOVER_ACTIVATE){
+		var hexColor;
+		if( towerList[towerMesh.towerArrayPosition].onCooldown == 1){hexColor = 0xaa30b5;}
+		else{hexColor = 0xff0000;}
 		for(var i = 0; i < towerMesh.material.materials.length; i++){
-			towerMesh.material.materials[i].emissive.setHex( 0xff0000 );
+			towerMesh.material.materials[i].emissive.setHex( hexColor );
 		}
 		//towerMesh.material.emissive.setHex( 0xff0000 );
 	}
@@ -266,12 +271,14 @@ function towerHover(towerMesh){
  * @param towerMesh: Mesh to manipulate
  */
 function towerNotHover(towerMesh){
+	var towerContainer = towerList[towerMesh.towerArrayPosition];
+	var hexColor;
+	if( towerList[towerMesh.towerArrayPosition].onCooldown == 1){hexColor = 0xaa30b5;}
+	else{hexColor = 0x000000;}
 	for(var i = 0; i < towerMesh.material.materials.length; i++){
 		towerMesh.currentHex = towerMesh.material.materials[i].emissive.getHex();
-		towerMesh.material.materials[i].emissive.setHex( 0x000000 );
+		towerMesh.material.materials[i].emissive.setHex( hexColor );
 	}
-	//towerMesh.currentHex = towerMesh.material.emissive.getHex();
-	//towerMesh.material.emissive.setHex( 0x000000 );
 }
 ////////////////////////////////////////////////////
 ///
@@ -315,9 +322,15 @@ function towerLeftClicked(towerMesh){
 }
 function towerOffCooldown(tower){
 	tower.onCooldown = 0;
+	for(var i = 0; i < tower.mesh.material.materials.length; i++){
+		tower.mesh.material.materials[i].emissive.setHex( 0xaa30b5 );
+	}
 }
 function towerOnCooldown(tower){
 	tower.onCooldown = 1;
+	for(var i = 0; i < tower.mesh.material.materials.length; i++){
+		tower.mesh.material.materials[i].emissive.setHex( 0x000000 );
+	}
 }
 
 ////////////////////////////////////////////////////

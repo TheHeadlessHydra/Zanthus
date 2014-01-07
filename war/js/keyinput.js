@@ -7,21 +7,10 @@
  * @author Serj Kazar
  */
 
-$(".add").click(function(){ 
-	addToTower(50);
-});
-$(".add2").click(function(){ 
-	addToTower(100);
-});
-$(".item1").click(function(){ 
-	spawn();
-});
-$(".addflingpiece").click(function(){ 
+$("#addflingpiece").click(function(){ 
 	addFlingPiece();
 });
-$(".item3").click(function(){ 
-});
-$(".erase").click(function(){ 
+$("#erase").click(function(){ 
 	enterDestroyMode();
 });
 

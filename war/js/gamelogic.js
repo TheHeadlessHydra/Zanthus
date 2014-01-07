@@ -12,6 +12,7 @@ function startGame(){
 	initClimbers();		/* Initializes the climber enemy type module */
 	game_started = 1;
 	
+	updateCoins(0);
 	setTimeout(updateWave,timeUntilNextWave);
 }
 
@@ -27,7 +28,8 @@ function updateCoins(addOrSub){
 		return 1;
 	}
 	else{
-		return 0;
+		document.getElementById( "total_coins" ).innerHTML = total_coins;
+		return 1;
 	}
 }
 

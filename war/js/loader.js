@@ -21,7 +21,7 @@ var turtle_mesh;
 var turtle_materials;
 
 var bgmountains_mesh;
-
+var bgPlane;
 
 function load_assets(){
 	document.getElementById( "progress" ).style.display = "block";
@@ -145,31 +145,13 @@ function initBaseMeshes(){
 	addStaticMeshToScene(groundplane_mesh);
 	addStaticMeshToScene(bgmountains_mesh);	
 
-	var bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(10000, 10000, 1, 1), new THREE.MeshLambertMaterial( { color: 0xffffff } ));
+
+	/* Background colour - check camera.js, the background moves with the camera */
+	bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(10000, 10000, 1, 1), new THREE.MeshLambertMaterial( { color: 0xf2d7b2 } ));
 	bgPlane.material.side = THREE.DoubleSide;
-	bgPlane.position.z = -7000;
-	//backgroundCamera.add(bgPlane);
-	//backgroundScene.add(bgPlane);
-	mainCamera.add(bgPlane);
+	bgPlane.position.set(0,0,-7000);
 	mainScene.add(bgPlane);
-	//backgroundScene.add(new THREE.AmbientLight(0x000044));
-	
-	
-	//mainScene.add(bgPlane);
-	
-	//addStaticMeshToScene(climber_mesh);
-	//climber_mesh.position.y = 100;
-	//test_activate(climber_mesh);
 }
-
-
-
-
-
-
-
-
-
 
 
 ///////////////////////////////////////////////////////////////
