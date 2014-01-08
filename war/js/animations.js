@@ -1,4 +1,10 @@
-
+/**
+ * animation.js
+ * 
+ * This file handles all animations currently available in the game. 
+ * 
+ * @author Serj Kazar
+ */
 
 var animationList = []; /* Tracks the animations currently being played */
 
@@ -32,6 +38,15 @@ function killAnimation(mesh){
 //
 // Flingpiece
 
+/**
+ * To start an animation for a flingpiece, this function should be called. 
+ */
+function flingpiece_animate(flingPiece){
+	flingpiece_activate(flingPiece);
+}
+/**
+ * Activates the mesh, making it ready for and thereby beginning, its animations.
+ */
 function flingpiece_activate(flingPiece){
 	flingPiece.meshType = "flingpiece";
 	
@@ -58,6 +73,11 @@ function flingpiece_activate(flingPiece){
 		killClimber(climberMeshArray[shouldBeDead[i]]);
 	}
 }
+/**
+ * Applies the next morph targets in the animation, and checks if
+ * the full animation has played and kills it if it has. 
+ * @param flingPiece: Mesh to be animated.
+ */
 function flingpiece_animation(flingPiece) {
 	flingPiece.padTimer++;
 	if(flingPiece.padTimer == flingPiece.speed){
@@ -77,39 +97,6 @@ function flingpiece_animation(flingPiece) {
 	flingPiece.lastKeyframe = flingPiece.currentKeyframe;
 }
 
-
-
-
-function test_activate(climber_mesh){
-	climber_mesh.type = "climber";
-	climber_mesh.speed = 2;           /* Slows down the animation the higher it goes. 1 = Regular speed, 2 = 2x slower, etc */
-	climber_mesh.padTimer = 0;        /* Internal variable to slow down animation*/
-	climber_mesh.keyframes = 259;     /* Total amount of keyframes in the animation */
-	climber_mesh.lastKeyframe = 0;    /* Used to track the last played frame */
-	climber_mesh.currentKeyframe = 0; /* Used to track the currently playing frame */
-	
-	animationList.push(climber_mesh);
-}
-function test_animation(climber_mesh) {
-	if(typeof climber_mesh != 'undefined'){
-		climber_mesh.padTimer++;
-		if(climber_mesh.padTimer == climber_mesh.speed){
-			climber_mesh.padTimer = 0;
-		}
-		else{
-			return;
-		}
-		climber_mesh.currentKeyframe++;
-		if(climber_mesh.currentKeyframe > climber_mesh.keyframes){
-			climber_mesh.currentKeyframe = 0;
-		}
-		//console.log("ANIMATION: "+climber_mesh.currentKeyframe);
-		climber_mesh.morphTargetInfluences[ climber_mesh.lastKeyframe ] = 0;
-		climber_mesh.morphTargetInfluences[ climber_mesh.currentKeyframe ] = 1;
-		climber_mesh.lastKeyframe = climber_mesh.currentKeyframe;
-	}
-}
-
 /**
  * Use this to begin a turtle enemy AI. 
  */
@@ -118,8 +105,8 @@ function turtle_animate(turtle){
 }
 
 /**
- * Activates a turtle mesh and begins its animation. If the mesh was already animating, it creates a smooth transition
- * from the previous animation to the next one. 
+ * Activates a turtle mesh and begins its animation. 
+ * TODO: --If the mesh was already animating, it creates a smooth transition from the previous animation to the next one.--
  * @param turtle - Mesh that must begin animations.
  * @param animType - Type of animation to play. Turtle supports three types:
  * 					 1) Walk cycle: 					"walk"
@@ -189,7 +176,6 @@ function turtle_animation(turtle){
 				/* Cycle the animation */
 				turtle.currentKeyframe = turtle.startFrame;
 			}
-			//console.log("ANIMATION: "+turtle.currentKeyframe);
 			turtle.morphTargetInfluences[ turtle.lastKeyframe ] = 0;
 			turtle.morphTargetInfluences[ turtle.currentKeyframe ] = 1;
 			turtle.lastKeyframe = turtle.currentKeyframe;
@@ -210,7 +196,6 @@ function turtle_animation(turtle){
 				turtle_activate(turtle,"climb");
 				return;
 			}
-			//console.log("ANIMATION: "+turtle.currentKeyframe);
 			turtle.morphTargetInfluences[ turtle.lastKeyframe ] = 0;
 			turtle.morphTargetInfluences[ turtle.currentKeyframe ] = 1;
 			turtle.lastKeyframe = turtle.currentKeyframe;
@@ -221,7 +206,6 @@ function turtle_animation(turtle){
 				/* Cycle the animation */
 				turtle.currentKeyframe = turtle.startFrame;
 			}
-			//console.log("ANIMATION: "+turtle.currentKeyframe);
 			turtle.morphTargetInfluences[ turtle.lastKeyframe ] = 0;
 			turtle.morphTargetInfluences[ turtle.currentKeyframe ] = 1;
 			turtle.lastKeyframe = turtle.currentKeyframe;

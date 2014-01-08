@@ -314,7 +314,7 @@ function towerLeftClicked(towerMesh){
 	else if(CURRENT_HOVER_MODE == HOVER_ACTIVATE){
 		var towerContainer = towerList[towerMesh.towerArrayPosition];
 		if(towerContainer.type == TOWER_FLING && towerContainer.onCooldown == 0){
-			flingpiece_activate(towerMesh);
+			flingpiece_animate(towerMesh);
 			towerOnCooldown(towerContainer);
 			setTimeout(function() {towerOffCooldown(towerContainer);},TOWER_FLING_COOLDOWN);
 		}

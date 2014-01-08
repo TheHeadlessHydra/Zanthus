@@ -6,6 +6,17 @@ img{
     vertical-align: middle;
 }
 
+body{
+	background:url('../images/background.png') repeat center;
+}
+
+#gameTitle{
+	font-family: 'Iceland', serif;
+	font-size: 50px;
+	letter-spacing: 3px;
+	color: #e8ddad;
+}
+
 /* The div that the game is rendered in */
 #gameCanvas{
 	/* Border */
@@ -43,6 +54,7 @@ img{
 	margin: 0 auto;
 	padding:1px;
 	padding-top:0px;
+	padding-right:0px;
 	/* Border */
 	-moz-border-radius: 15px;
 	border-radius: 15px;
@@ -56,6 +68,7 @@ img{
 
 #head {
 	padding: 10px;
+	padding-righ:0px;
 	/*background: #fdd;*/
 }
 #sub_head{
@@ -76,7 +89,10 @@ img{
 	padding: 10px;
 	/*background: #bfb;*/
 }
-
+#content-2{
+	padding:0px;
+	margin: 0 auto;
+}
 #column-2 {
 	width:1000px;
 	height:600px;
@@ -86,16 +102,19 @@ img{
 }
 
 #column-3 {
-	padding: 10px;
-	padding-top:50px;
+	padding: 0px;
+	margin: 0 auto;
 	
 	text-align:center;
 	vertical-align:center;
 	
-	overflow: auto; 
-	height: 600px;
+	overflow-y: auto; 
+	overflow-x: auto; 
+	/* Move the menu down a bit */
+	margin-top:20px;
+	height: 560px;
 	
-	float: left;
+	float: right;
 	width: 220px;
 	
 	/*background: #dff;*/
@@ -108,24 +127,55 @@ img{
 }
 
 .listElement{
-	padding:10px;
 }
 /***************************************/
 
 /********************************
 * Select Boxes
 *********************************/
+#purhcasePieces{
+	margin: 0 auto;
+	padding:0px;
+	padding-top:20px;
+	width:200px;
+	height:150px;
+	background:url('../images/ui-purchase-pieces.png') no-repeat right;
+}
+#modifyTower{
+	margin: 0 auto;
+	padding:0px;
+	padding-top:20px;
+	width:200px;
+	height:150px;
+	background:url('../images/ui-modify.png') no-repeat right;
+}
 #addflingpiece{
 	margin: 0 auto;
+	padding:0px;
 	width:200px;
 	height:200px;
 	background:url('../images/flingpiece_icon.png') no-repeat center;
 }
 #addflingpiece:hover{
 	margin: 0 auto;
+	padding:0px;
 	width:200px;
 	height:200px;
 	background:url('../images/flingpiece_icon-glow.png') no-repeat center;
+}
+#destroy{
+	margin: 0 auto;
+	padding:0px;
+	width:200px;
+	height:200px;
+	background:url('../images/destroy_icon.png') no-repeat center;
+}
+#destroy:hover{
+	margin: 0 auto;
+	padding:0px;
+	width:200px;
+	height:200px;
+	background:url('../images/destroy_icon-glow.png') no-repeat center;
 }
 
 #coins{
@@ -146,9 +196,11 @@ img{
 * Progress bar and loading css
 *********************************/
 #progress {
-	color:red;
+	color:#291202;
 	top:7em;
 	width: 1000px;
+	font-family: 'Iceland', serif;
+	letter-spacing: 3px;
 	font-size:3em;
 	font-variant:small-caps;
 	font-weight:bold;
@@ -158,7 +210,7 @@ img{
 	text-shadow: #000 0px 0px 10px;
 	display: block;
 	
-	background-color:#fff;
+	background-color:#947854;
 }
 #start {
 	color:#fff;
@@ -172,12 +224,12 @@ img{
 	position: relative;
 	left:7.5em;
 	text-align: center;
-	background: white;
+	background: #291202;
 	width: 250px;
 	height: 10px;
 }
 #bar {
-	background:#d00;
+	background:#4d412f;
 	width:50px;
 	height:10px;
 }

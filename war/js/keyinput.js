@@ -10,7 +10,7 @@
 $("#addflingpiece").click(function(){ 
 	addFlingPiece();
 });
-$("#erase").click(function(){ 
+$("#destroy").click(function(){ 
 	enterDestroyMode();
 });
 
@@ -71,6 +71,10 @@ $("#gameCanvas").on("mouseup", function(event) {
     	lastY = -1;
     }
 });
+/**
+ * Checks and maintains which mouse click event
+ * just occured (left or right).
+ */
 $( "#gameCanvas" ).mousedown(function(event) {
 	if(event.which == 1){
 		onLeftClick(event);
@@ -101,7 +105,6 @@ function onRightClick(event){
 	return false;
 }
 function onLeftClick(event){
-	//event = event || window.event //For IE
 	var x=event.clientX;
 	var y=event.clientY;
 	
