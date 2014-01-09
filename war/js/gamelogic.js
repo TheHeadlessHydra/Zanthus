@@ -33,7 +33,7 @@ function updateCoins(addOrSub){
 	}
 	else{
 		document.getElementById( "total_coins" ).innerHTML = total_coins;
-		return 1;
+		return 0;
 	}
 }
 
