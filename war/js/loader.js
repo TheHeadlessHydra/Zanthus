@@ -37,6 +37,7 @@ var bgPlane;
  */
 function load_assets(){
 	document.getElementById( "progress" ).style.display = "block";
+	document.getElementById( "gameovermessage" ).style.display = "none";
 	
 	var loader = new THREE.JSONLoader( true );
 	loader.callbackProgress = callbackProgress;

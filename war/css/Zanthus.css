@@ -195,7 +195,7 @@ body{
 /********************************
 * Progress bar and loading css
 *********************************/
-#progress {
+#progress, #gameover {
 	color:#291202;
 	top:7em;
 	width: 1000px;
@@ -211,6 +211,15 @@ body{
 	display: block;
 	
 	background-color:#947854;
+}
+#retry{
+	color:#731702;
+	font-family: 'Iceland', serif;
+	letter-spacing: 3px;
+	font-size:35px;
+	font-variant:small-caps;
+	font-weight:bold;
+	text-shadow: #000 0px 0px 0px;
 }
 #start {
 	color:#fff;

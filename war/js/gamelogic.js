@@ -1,10 +1,14 @@
-var total_coins = 50000;
+var total_coins = 500;
 var game_started = 0;
 
 
 function gameOver(){
 	console.log("Game over!");
+	document.getElementById( "gameovermessage" ).style.display = "block";
 	window.cancelAnimationFrame(renderId);
+}
+function reset(){
+	
 }
 function startGame(){
 	console.log("Start game!");

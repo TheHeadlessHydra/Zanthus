@@ -52,7 +52,7 @@ function flingpiece_activate(flingPiece){
 	
 	flingPiece.speed = 2;           /* Slows down the animation the higher it goes. 1 = Regular speed, 2 = 2x slower, etc */
 	flingPiece.padTimer = 0;        /* Internal variable to slow down animation*/
-	flingPiece.keyframes = 170;     /* Total amount of keyframes in the animation */
+	flingPiece.keyframes = 159;     /* Total amount of keyframes in the animation */
 	flingPiece.lastKeyframe = 0;    /* Used to track the last played frame */
 	flingPiece.currentKeyframe = 0; /* Used to track the currently playing frame */
 	
