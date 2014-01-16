@@ -758,7 +758,7 @@
 		"colorSpecular" : [0.5, 0.5, 0.5],
 		"depthTest" : true,
 		"depthWrite" : true,
-		"mapDiffuse" : "grass_posterized.png",
+		"mapDiffuse" : "grass_diffuse.png",
 		"mapDiffuseWrap" : ["repeat", "repeat"],
 		"mapNormal" : "grass_normal.png",
 		"mapNormalWrap" : ["repeat", "repeat"],

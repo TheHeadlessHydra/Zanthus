@@ -9,6 +9,8 @@
 	
 	<!-- fonts -->
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Iceland">
+	<link href='http://fonts.googleapis.com/css?family=Sintony' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Gudea">
 	
 	<!-- libs -->
 	<script type="text/javascript" src="lib/jquery.min.js"></script>
@@ -70,6 +72,47 @@
 	</div>
 </div> <!-- main -->
 
+<div id="bottom_content">
+	<div class="bottom_content_header">ABOUT</div>
+	<div class="bottom_content_body">Zanthus is a game currently in its alpha stages made by student 
+									<a class="bottom_content_link" href="http://www.theheadlesshydra.com">Serj Kazar</a> 
+									from the University of Waterloo. It is a tower defence game built using the
+									<a class="bottom_content_link" href="http://threejs.org/">three.js</a> webGL API.
+									For more information on how the game was built or the workflow required for 
+									importing custom meshes and animations into webGL, check out the projects
+									section of my
+									<a class="bottom_content_link" href="http://manticore.theheadlesshydra.com/compsci">website.</a>
+									The game is currently best optimized for Chrome, but it will function in Firefox (albeit slowly).
+									The game will not function in Internet Explorer. 
+									</div>
+	<div class="bottom_content_header">CONTROLS</div>
+	<div class="bottom_content_body">The object of the game is to last as long as possible. Waves of enemies will come at the tower 
+									and begin climbing. Once a single enemy reaches the top, its game over. On the right of the play area
+									is a list of tower pieces you can purchase. Every time you purchase a piece, your tower grows in size.
+									You can then use this tower piece to defend against the oncoming waves of enemies. Killing an 
+									enemy will reward you with some gold and allow you to purchase more tower pieces. To scroll around
+									in the play area, hold the right mouse button and move up or down.  
+									<br>
+									Different tower types and how to use them:
+									<br><br>
+									<b>Fling Piece:</b> The fling piece will kill any enemies currently at that position on the tower.
+									To activate it, simply click on the tower itself. It has a cooldown of 15s represented by a purple glow.
+									Once the glow dissapears, it is possible to click on it again. 
+									
+									<br>
+	</div>
+	<div class="bottom_content_header">COMING FEATURES</div>
+	<div class="bottom_content_body">
+		<ul>
+		<li>A better reward system! Simply playing until death is no reward system for a game to adopt.</li>
+		<li>New tower pieces. Currently only one type of tower piece exists which will get boring in about a minute.</li>
+		<li>New enemy types. Currently only a single enemy type exists. </li>
+		<li>More realistic animations on the enemies. The current animations are outdated and too simple. </li>
+		<li>More styles of defending the tower other than building pieces on the tower. </li>
+		</ul>
+	</div>
+</div>
+<div id="copyright">&copy; Serj Kazar</div>
 
 	<!-- This ordering is very important! Be careful with it.
 		 You will almost always want init to go first, and driver last -->
